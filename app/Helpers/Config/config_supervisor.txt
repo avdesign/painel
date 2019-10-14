@@ -1,0 +1,44 @@
+//INSTALAR
+sudo apt-get install supervisor
+
+// CRIAR ARQUIVO DE CONFIGURAÇÃO
+sudo nano /etc/supervisor/conf.d/laravel-worker.conf
+
+[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/dominio/artisan queue:work --tries=3 --daemon
+autostart=true
+autorestart=true
+user=root
+numprocs=2
+stdout_logfile=/var/www/dominio/storage/logs/worker.log
+
+// PERMISSSÃO
+chmod +x laravel-worker.conf
+
+// START SUPERVISOR
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start laravel-worker:*
+
+
+//COMANDOS MANUAIS
+
+//reiniciar a fila.
+php artisan queue:restart
+
+//Para criar uma migração para a failed_jobs.
+php artisan queue:failed-table
+php artisan migrate
+
+//Para ver todos os trabalhos com falha que foram inseridos na failed_jobs
+php artisan queue:failed
+
+//Para repetir todos os seus trabalhos com falha
+php artisan queue:retry all
+
+Para excluir todos os trabalhos com falha
+php artisan queue:flush
+
+
+

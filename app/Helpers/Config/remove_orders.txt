@@ -1,0 +1,14 @@
+//REMOVE TABLES
+
+order_trackings
+order_items
+orders
+config_order_payments
+config_order_statuses
+
+// MIGRATE
+php artisan migrate
+
+//SEEDER
+php artisan db:seed --class=ConfigOrderStatusTableSeeder
+php artisan db:seed --class=ConfigOrderPaymentsTableSeeder

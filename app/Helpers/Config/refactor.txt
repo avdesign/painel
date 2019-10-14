@@ -1,0 +1,10 @@
+Modulo Admin
+status -> active
+
+ConfigProfileClients
+status -> active
+
+User
+status -> active
+
+Module AdminPermissions -> AdminPermission

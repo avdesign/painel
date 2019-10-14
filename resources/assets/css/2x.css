@@ -1,0 +1,24 @@
+/**
+ *     ___ _    __   ____            _
+ *    /   | |  / /  / __ \___  _____(_)____ ____ 
+ *   / /| | | / /  / / / / _ \/ ___/ / __ `/ __ \
+ *  / ___ | |/ /  / /_/ /  __(__  ) / /_/ / / / /
+ * /_/  |_|___/  /_____/\___/____/_/\__, /_/ /_/ 
+ *                                 /____/        
+ * ------------ By Anselmo Velame --------------- 
+ *
+ * Styles override for high resolution screens
+ */
+
+/* Class used to determine which media queries are on */
+#mediaquery-checker {
+	height: 20px;
+}
+
+/* Hi-res backgrounds */
+#shortcuts > li > a,
+#shortcuts > li > span,
+#shortcuts > li > a:before {
+	background-image: url(../img/highres/shortcuts.png);
+	background-size: 136px 560px;
+}

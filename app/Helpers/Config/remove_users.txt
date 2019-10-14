@@ -1,0 +1,14 @@
+//REMOVE TABLES
+order_items
+order_trackings
+orders
+wishlists
+user_addresses
+user_notes
+users
+
+// MIGRATE
+php artisan migrate
+
+//SEEDER
+php artisan db:seed --class=UsersTableSeeder

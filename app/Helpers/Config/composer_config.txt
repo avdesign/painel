@@ -1,0 +1,3 @@
+//MEMORIA Killed
+sudo fallocate -l 1G /swapfile
+sudo mkswap /swapfile

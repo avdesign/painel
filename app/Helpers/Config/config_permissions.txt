@@ -1,0 +1,38 @@
+// DELETE TABLES
+admim_permissions
+config_permission_config_profile
+config_permissions
+config_modules
+
+
+// REMOVER TABLE migrations
+admim_permissions
+config_permissions
+config_modules
+
+// ALTERAR
+nano app/Providers/Admin/AuthServiceProvider.php
+$permissions = [];
+
+
+//MIGRATE
+cd Projects/painel
+php artisan migrate
+
+//SEEDER
+php artisan db:seed --class=ConfigModulesTableSeeder
+php artisan db:seed --class=ConfigPermissionsTableSeeder
+
+//ALTERAR
+nano app/Providers/Admin/AuthServiceProvider.php
+$permissions = AdminPermissions::all();
+
+//PUBLICAR
+git add .
+git commit -m ""
+git push painel +master:refs/heads/master
+
+
+
+
+

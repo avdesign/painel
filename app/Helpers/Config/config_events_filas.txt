@@ -1,0 +1,13 @@
+
+//Prodiders/EventServiceProvider.php
+
+protected $listen = [
+    'AVDPainel\Events\ResponseContactEvent' => [
+        'AVDPainel\Listeners\ResponseContactListener',
+    ]
+];
+
+//Gerar Events e Listeners
+php artisan event:generate
+
+php artisan make:mail ResponseContact --markdown=backend.emails.contacts.response

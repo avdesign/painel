@@ -1,2 +1,0 @@
-# painel
-Painel Administrativo
