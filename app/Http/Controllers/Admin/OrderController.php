@@ -90,7 +90,6 @@ class OrderController extends Controller
         $title_printer  = $this->messages['title_printer'];
         $title_download = $this->messages['title_download'];
 
-
         return view("{$this->view}.index", compact(
             'title',
             'title_create',
