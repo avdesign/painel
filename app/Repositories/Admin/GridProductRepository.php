@@ -123,20 +123,17 @@ class GridProductRepository implements GridProductInterface
         if ($product->stock == 1) {
             $entry = $input['input'];
             if (!empty($entry)) {
-
-                if ($data->input != $entry) {
-                    $dataForm['entry'] = $entry; // inventory -> ammount
-                    $dataForm['grid'] = $data->grid; // inventory -> grid
-                    $dataForm['grid_id'] = $data->id; // inventory -> grid_id
-                    $dataForm['previous_stock'] = $data->stock; // inventory -> grid
-                    $previousInput = $data->input;
-                    $currentInput = $previousInput + $entry;
-                    $previousStock = $data->stock;
-                    $currentStock = ($previousStock + $entry) - $data->output;
-                    $dataForm['input'] = $currentInput;
-                    $dataForm['stock'] = $currentStock;
-                    $change .= ' '.constLang('entry').':'.$entry.' '.constLang('stock').':'.$currentStock;
-                }
+                $dataForm['entry'] = $entry; // inventory -> ammount
+                $dataForm['grid'] = $data->grid; // inventory -> grid
+                $dataForm['grid_id'] = $data->id; // inventory -> grid_id
+                $dataForm['previous_stock'] = $data->stock; // inventory -> grid
+                $previousInput = $data->input;
+                $currentInput = $previousInput + $entry;
+                $previousStock = $data->stock;
+                $currentStock = ($previousStock + $entry) - $data->output;
+                $dataForm['input'] = $currentInput;
+                $dataForm['stock'] = $currentStock;
+                $change .= ' '.constLang('entry').':'.$entry.' '.constLang('stock').':'.$currentStock;
             }
             if ($data->qty_min != $input['qty_min']) {
                 $dataForm['qty_min'] = $input['qty_min'];

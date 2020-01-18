@@ -130,6 +130,8 @@
                         if (ac == 'create') {
 
                             $('input[name="prod[name]"]').val('');
+                            $('input[name="img[code]"]').val(data.code);
+                            $('input[name="img[order]"]').val('1');
 
                             var count_product = $("#count_product").html(),
                                 total_product = parseFloat(count_product)+1;
@@ -140,8 +142,6 @@
                             var count_category = $("#count-category-"+data.product.category_id).html(),
                                 total_category = parseFloat(count_category)+1;
                                 $("#count-category-"+data.product.category_id).html(total_category);
-
-                            $('input[name="img[order]"]').val('1');
 
                             // adiciona o field obrigatório no form-colors
                             $("#insert_product").html('<input name="img[product_id]" type="hidden" value="'+data.product.id+'">'+

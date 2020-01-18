@@ -32,6 +32,8 @@
         <div class="new-row five-columns twelve-columns-tablet">
             <fieldset class="fieldset">
                 <legend class="legend">Status do produto</legend>
+
+
                 <p class="button-height inline-label">
                     <label for="active" class="label">Status</label>
                     <span class="button-group">
@@ -98,21 +100,7 @@
                     </span>
                 </p>
 
-                @if($configProduct->kit == 1)
-                    <p class="button-height inline-label">
-                        <label for="kit" class="label">Venda Caixa</label>
-                        <span class="button-group">
-                            <label for="kit_1" class="button green-active">
-                                <input type="radio" name="prod[kit]"  id="kit_1" onclick="setKit('create','1','{{route('change-grids')}}')" value="1" checked >
-                                Ativo
-                            </label>
-                            <label for="kit_0" class="button red-active">
-                                <input type="radio" name="prod[kit]" id="kit_0" onclick="setKit('create','0','{{route('change-grids')}}')" value="0" >
-                                Inativo
-                            </label>
-                        </span>
-                    </p>
-                @endif
+
 
                 @if($configProduct->stock == 1)
                     <p class="button-height inline-label">
@@ -170,6 +158,21 @@
         <div class="seven-columns twelve-columns-tablet">
             <fieldset class="fieldset">
                 <legend class="legend">Valores do produto</legend>
+
+                @if($configProduct->kit == 1)
+                    <p class="button-height">
+                        <span class="button-group">
+                            <label for="kit_1" class="button green-active">
+                                <input type="radio" name="prod[kit]"  id="kit_1" onclick="setKit('create','1','{{route('change-grids')}}')" value="1" checked >
+                                Caixa
+                            </label>
+                            <label for="kit_0" class="button red-active">
+                                <input type="radio" name="prod[kit]" id="kit_0" onclick="setKit('create','0','{{route('change-grids')}}')" value="0" >
+                                Unidade
+                            </label>
+                        </span>
+                    </p>
+                @endif
 
                 @if($configProduct->cost == 1)
                     <p class="button-height">

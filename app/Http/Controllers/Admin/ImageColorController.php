@@ -90,10 +90,21 @@ class ImageColorController extends Controller
 
         $pixel = $this->configImage->setName('default','Z');
         $configProduct = $this->configProduct->setId(1);
-
         $group   = array(); // array vazio
         $grids   = array(); // array vazio
         $product = $this->interProduct->setId($idpro);
+        $code = null;
+        if ($configProduct->code == 1) {
+            $count = count($product->images);
+            if ($count >= 1) {
+                foreach ($product->images as $key => $image) {
+                    if ($key == $count-1) {
+                        $code = $this->getCode($image->code);
+                    }
+                }
+
+            }
+        }
 
         ($configProduct->kit == 1 ? $kits = $this->configKit->pluck() : $kits = false);
 
@@ -108,7 +119,8 @@ class ImageColorController extends Controller
                 'idpro',
                 'group',
                 'grids',
-                'kits'
+                'kits',
+                'code'
             ));
         }
     }
@@ -155,7 +167,8 @@ class ImageColorController extends Controller
                             $grids = $this->interGrid->createUnit($configProduct, $request['grids'], $image, $product);
                         }
                         if ($grids) {
-                            $out = $this->interModel->uploadRender($config, $image, $action);
+
+                            $out = $this->interModel->uploadRender($config, $image, $action, $configProduct->code);
 
                             DB::commit();
 
@@ -349,6 +362,15 @@ class ImageColorController extends Controller
             DB::rollback();
             return $e->getMessage();
         }
+
+    }
+
+
+    public function getCode($code) {
+        $prev = substr($code, 0 , -3);
+        $next = (int)substr($code, -2)+1;
+        ($next <= 9 ? $dig = "0{$next}" : $dig = $next);
+        return "{$prev}-{$dig}";
 
     }
 

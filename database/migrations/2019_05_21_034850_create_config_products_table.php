@@ -32,6 +32,7 @@ class CreateConfigProductsTable extends Migration
             $table->tinyInteger('colors');
             $table->tinyInteger('group_colors');
             $table->tinyInteger('positions');
+            $table->tinyInteger('code');
             $table->tinyInteger('grids');
             $table->tinyInteger('reviews');
             $table->tinyInteger('quickview');

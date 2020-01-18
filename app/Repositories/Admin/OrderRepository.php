@@ -351,6 +351,23 @@ class OrderRepository implements OrderInterface
                         $shipping .= "<p>Telefone: <strong>{$shippings[0]->phone}</strong></p>";
                     }
                 }
+                /*********************************** GATEWAY ****************************************************/
+                $gateway = ' ';
+                if ($val->company == 'PagSeguro') {
+                    $gateway .= '<li>';
+                        $gateway .= '<a href="gateway/pagseguro/'.$val->id.'" class="file-link">';
+                            $gateway .= '<span class="icon file-dll"></span>';
+                            $gateway .= 'Transações PagSeguro';
+                        $gateway .= '</a>';
+                    $gateway .= '</li>';
+                }
+
+                /*********************************** BILLET ****************************************************/
+                $billet = ' ';
+                $link   = route('generate.billet', $val->reference);
+                if ($val->config_form_payment_id == 2) {
+                    $billet .= '<p><a href="'.$link.'" target="_blank" class="button icon-printer with-tooltip blue-gradient compact">Imprimir Boleto</a></p>';
+                }
 
                 $nData['id']            = $val->id;
                 $nData['state']         = $state_html;
@@ -383,7 +400,8 @@ class OrderRepository implements OrderInterface
 
                 //Routes Gatteway Company.
                 $nData['company']       = $val->company;
-                $nData['str_company']   = Str::slug($val->company);
+                $nData['billet_link']   = $billet;
+                $nData['gateway_link']  = $gateway;
 
                 $data[] = $nData;
             }
@@ -416,6 +434,15 @@ class OrderRepository implements OrderInterface
     public function setId($id)
     {
         return $this->model->withTrashed()->find($id);
+    }
+
+    /**
+     * @param $reference
+     * @return mixed
+     */
+    public function setReference($reference)
+    {
+        return $this->model->where('reference', $reference)->first();
     }
 
 

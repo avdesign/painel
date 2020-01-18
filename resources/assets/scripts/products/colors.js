@@ -116,7 +116,7 @@
         success: function(data) {
             if (data.success == true) {
                 if (data.ac == 'create') {
-                    $('input[name="img[code]"]').val('');
+                    $('input[name="img[code]"]').val(data.code);
                     $('input[name="img[color]"]').val('');
                     $('input[name="img[html]"]').val('');
                     $('#barvadiv' ).attr('style', 'margin-top:2px;width:100px;height:100px;');

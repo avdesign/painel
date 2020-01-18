@@ -32,6 +32,9 @@
     </div>
     <div class="six-columns">
         <h4 class="blue underline">Pedido: {{$data->reference}}</h4>
+        @if ($data->config_form_payment_id == 2)
+            <p><a href="{{route('generate.billet', $data->reference)}}" target="_blank" class="button icon-printer with-tooltip blue-gradient compact">Imprimir Boleto</a></p>
+        @endif
         @if ($data->company == 'PagSeguro')
             <p>Status: <strong> {{config('pagseguro.status.'.$data->config_status_payment_id.'.label')}} </strong></p>
             <p>Gatteway: <strong> {{$data->company}} </strong></p>

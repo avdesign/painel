@@ -31,7 +31,7 @@ class CreateInventoriesTable extends Migration
             $table->string('category', 30);
             $table->string('product', 60);
             $table->string('image')->nullable();
-            $table->string('code', 20);
+            $table->string('code');
             $table->string('color', 20)->nullable();
             $table->string('grid')->nullable();
             $table->integer('amount')->default(0);

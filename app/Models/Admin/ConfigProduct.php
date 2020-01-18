@@ -24,6 +24,7 @@ class ConfigProduct extends Model
         'colors',
         'group_colors',
         'positions',
+        'code',
         'grids',
         'reviews',
         'quickview',

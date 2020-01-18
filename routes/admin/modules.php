@@ -10,14 +10,6 @@ Route::post('perfil-cliente/prices', 'Admin\ConfigProfileClientController@prices
 Route::post('perfil-cliente/offers', 'Admin\ConfigProfileClientController@offers')->name('profile.client.get.offers');
 
 
-
-
-
-
-
-
-
-// Conteudo do site
 // Contrato de Compra Venda
 Route::resource('content/contract', 'Admin\ContentContractController', ['except' => ['edit']]);
 Route::get('content/contract-load', 'Admin\ContentContractController@loadContent')->name('contract.load');
@@ -204,7 +196,15 @@ Route::get('catalog', 'Admin\CatalogController@index');
 Route::post('catalog/data', 'Admin\CatalogController@data')->name('catalog.data');
 Route::put('catalog/status/{id}', 'Admin\CatalogController@status')->name('status.catalog');
 
+
 // Controle de Estoque
+Route::resource('stock', 'Admin\StockController', ['only' => ['index', 'update']]);
+Route::post('stock/data', 'Admin\StockController@data')->name('stock.data');
+Route::get('stock/entry/{id}', 'Admin\StockController@entryStock')->name('stock.entry');
+Route::get('stock/exit/{id}', 'Admin\StockController@exitStock')->name('stock.exit');
+
+
+// Controle do Inventário
 Route::get('inventory', 'Admin\InventoryController@index');
 Route::post('inventory/data', 'Admin\InventoryController@data')->name('inventory.data');
 Route::get('inventory/{id}/details', 'Admin\InventoryController@details');

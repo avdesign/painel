@@ -145,6 +145,7 @@ class ProductController extends Controller
             return view("backend.erros.message-401");
         }
 
+        $code          = null; # ref imageColor
         $idpro         = $idcat; // simular idpro (Só para um novo produto)
         $group         = array(); // array vazio 
         $pixel         = $this->configImageProduct->setName('default', 'Z');
@@ -163,6 +164,7 @@ class ProductController extends Controller
         return view('backend.products.tabs-hexa', compact(
             'groupColors',
             'kits',
+            'code',
             'idpro',
             'group',
             'pixel',
@@ -202,6 +204,10 @@ class ProductController extends Controller
                 $cost = $this->productCost->create($dataForm['cost'], $data);
 
                 $configProduct = $this->configProduct->setId(1);
+                // Gerar o código automático
+                if ($configProduct->code == 1) {
+                    $code = "{$data->brand_id}-{$data->section_id}-{$data->category_id}-{$data->id}-01";
+                }
 
                 $prices = $this->productPrice->create($dataForm['price'], $data->id, $data->offer, $configProduct->price_default);
                 if ($prices) {
@@ -217,12 +223,14 @@ class ProductController extends Controller
                 $message = $this->messages['store_false'];
                 $product = null;
                 $prices  = null;
+                $code  = null;
             }
             $out = array(
                 'success' => $success, 
                 'message' => $message,
                 'product' => $product,
-                'prices'  => $prices
+                'prices'  => $prices,
+                'code' => $code
             );
 
             return response()->json($out);

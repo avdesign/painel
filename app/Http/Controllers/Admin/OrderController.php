@@ -126,7 +126,6 @@ class OrderController extends Controller
             return view("backend.erros.message-401");
         }
 
-
         $forms    = $this->formPayment->pluck();
         $status   = $this->statusPayment->pluck();
 

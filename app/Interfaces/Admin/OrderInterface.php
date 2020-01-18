@@ -13,6 +13,7 @@ interface OrderInterface
     public function getAll($request);
     public function getOrder($user_id);
     public function setId($id);
+    public function setReference($reference);
     public function create($input,$status,$form);
     public function update($input, $id);
     public function delete($id);

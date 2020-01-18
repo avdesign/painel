@@ -50,6 +50,7 @@ class ConfigProductRepository implements ConfigProductInterface
                 ', Custo:'.($data->cost == 1 ? 'Ativo' : 'Inativo').
                 ', Estoque:'.($data->stock == 1 ? 'Ativo' : 'Inativo').
                 ', Grades:'.($data->grids == 1 ? 'Ativo' : 'Inativo').
+                ', Código:'.($data->code == 1 ? 'Ativo' : 'Inativo').
                 ', Frete:'.($data->freight == 1 ? 'Ativo' : 'Inativo').
                 ', Kit:'.($data->kit == 1 ? 'Ativo' : 'Inativo').
                 ', Estoque mínimo dos kits:'.$data->qty_min_kit.

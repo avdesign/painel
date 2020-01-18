@@ -835,12 +835,21 @@ class ImageColorRepository implements ImageColorInterface
      * @param $image
      * @return array
      */
-    public function uploadRender($config, $image, $action)
+    public function uploadRender($config, $image, $action, $code)
     {
         foreach ($config as $value) {
             if ($value->default == 'T') {
                 $path = $this->photoUrl.$value->path;
             }
+        }
+
+        if ($code) {
+            $prev = substr($image->code, 0 , -3);
+            $next = (int)substr($image->code, -2)+1;
+            ($next <= 9 ? $dig = "0{$next}" : $dig = $next);
+            $code = "{$prev}-{$dig}";
+        } else {
+            $code = '';
         }
 
         if ($action == 'create') {
@@ -851,7 +860,7 @@ class ImageColorRepository implements ImageColorInterface
                 "id"         => $image->id,
                 "name"       => $image->slug,
                 "color"      => $image->color,
-                "code"       => $image->code
+                "code"       => $code
             );
         } else {
             $render = view('backend.colors.gallery-render', compact('action','image', 'path'))->render();

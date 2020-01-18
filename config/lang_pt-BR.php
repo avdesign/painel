@@ -95,6 +95,7 @@ return [
         'server' => 'Houve um erro no servidor!',
         '404'  => 'Página não encontrada',
     ],
+    'exit' => 'Saida',
     'featured' => 'Destaque',
     'filter' => 'Filtrar',
     'phone' => 'Preço',
@@ -333,6 +334,9 @@ return [
         ],
         'shipping' => [
             'freight' => 'Frete'
+        ],
+        'stock' => [
+            'title' => 'Controle de Estoque'
         ]
 
 

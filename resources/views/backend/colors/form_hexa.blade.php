@@ -2,7 +2,7 @@
 <div class="fieldset silver-bg">
     <p class="block-label button-height">
         <label for="code_img_{{$idpro}}" class="label">Código<span class="red">*</span></label>
-        <input type="text" name="img[code]" id="code_img_{{$idpro}}" value="" autocomplete="off" class="input full-width">
+        <input type="text" name="img[code]" id="code_img_{{$idpro}}" value="{{$code}}" autocomplete="off" class="input full-width">
     </p>
     <p class="block-label button-height">
         <label for="color_img_{{$idpro}}" class="label">Cor<span class="red">*</span></label>

@@ -377,6 +377,11 @@ class ProductRepository implements ProductInterface
     public function create($input)
     {
 
+        if ($input['kit'] == 0) {
+            $input['kit_name'] = '';
+        }
+
+
         if (isset($input['freight']) && $input['freight'] == 0) {
             unset($input['declare']);
             unset($input['weight']);
@@ -414,7 +419,6 @@ class ProductRepository implements ProductInterface
 
         $data = $this->model->create($input); 
         if ($data) {
-
             $slug = ["slug" => $data->slug.'-'.numLetter($data->id, 'letter')];
             $update = $data->update($slug);
 

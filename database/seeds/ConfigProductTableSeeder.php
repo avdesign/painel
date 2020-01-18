@@ -29,6 +29,7 @@ class ConfigProductTableSeeder extends Seeder
 	        'colors' => 1,
 	       	'group_colors' => 1,
 	        'positions' => 1,
+	        'code' => 1,
 	        'grids' => 1,
             'reviews' => 0,
             'quickview' => 1,

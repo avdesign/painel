@@ -146,6 +146,19 @@
 								</label>
 							</span>
 						</p>
+                        <p class="button-height inline-label">
+                            <label for="kit" class="label">Gerar Código</label>
+                            <span class="button-group">
+								<label for="code-1" class="button green-active">
+									<input type="radio" name="code" id="code-1" value="1" @if($data->code == 1) checked @endif>
+									Sim
+								</label>
+								<label for="code-0" class="button red-active" >
+									<input type="radio" name="code" id="code-0" value="0" @if($data->code == 0) checked @endif>
+									Não
+								</label>
+							</span>
+                        </p>
 						@can('webmaster-view')
 							<p class="button-height inline-label">
 								<label for="grids" class="label">Grades</label>
@@ -302,6 +315,7 @@
 						<li><b>Estoque Máximo:</b> Alerta o administrador que já está no limite máximo.</li>
 						<li><b>Frete:</b>  Habilita  o modulo de frete.</li>
 						<li><b>Vender Kits:</b>  Habilita  o modulo de vendas por kits (caixa,kit,pacote etc.)</li>
+						<li><b>Gerar Código:</b>  Habilita  gerar o código atutomático para os produtos</li>
 						<li><b>Grades:</b> Habilita  o modulo das grades dos produtos.</li>
 						<li><b>Fotos das Cores:</b> Habilita  inserir cores dos produtos.</li>
 						<li><b>Fotos das Posições:</b> Habilita  inserir fotos de posições.</li>

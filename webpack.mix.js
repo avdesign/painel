@@ -193,6 +193,7 @@ mix.scripts('resources/assets/scripts/products/colors.js', 'public/backend/scrip
 mix.scripts('resources/assets/scripts/products/positions.js', 'public/backend/scripts/products/positions.min.js');
 mix.scripts('resources/assets/scripts/products/grids.js', 'public/backend/scripts/products/grids.min.js');
 mix.scripts('resources/assets/scripts/products/catalog.js', 'public/backend/scripts/products/catalog.min.js');
+mix.scripts('resources/assets/scripts/products/stock.js', 'public/backend/scripts/products/stock.min.js');
 
 mix.scripts('resources/assets/scripts/reports/inventory.js', 'public/backend/scripts/reports/inventory.min.js');
 

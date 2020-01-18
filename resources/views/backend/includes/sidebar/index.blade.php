@@ -52,20 +52,29 @@
 						<span><span id="count_category" class="list-count">{{$sidebar['total_categories']}}</span></span>
 					</a>					
 				</li>
+
+
 				<li>
 					<a href="catalog" title="Catalogo">Catalogo
 						<span><span id="count_colors" class="list-count">{{$sidebar['total_colors']}}</span></span>
 					</a>					
 				</li>
+                @can('stock-view')
+                    <li>
+                        <a href="stock" title="{{constLang('stock')}}">{{constLang('stock')}}</a>
+                    </li>
+                @endcan
 
-				<li class="with-right-arrow">
-					<span><span class="list-count">1</span>{{constLang('reports')}}</span>
+                <!-- Estoque e Inventário -->
+                <li class="with-right-arrow">
+					<span><span class="list-count">2</span>{{constLang('reports')}}</span>
 					<ul class="big-menu">
-						@can('inventory-view')
+                        @can('inventory-view')
 							<li><a href="inventory">{{constLang('inventory')}}</a></li>
 						@endcan
 					</ul>
 				</li>
+
 				<li>
 					<a href="https://mail.zoho.com/zm/#mail/folder/inbox" target="_blank" title="Zoho Mail">Zoho Mail</a>
 				</li>

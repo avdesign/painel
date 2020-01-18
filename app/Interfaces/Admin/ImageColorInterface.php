@@ -18,7 +18,7 @@ interface ImageColorInterface
     public function delete($image, $product, $config, $reload);
     public function status($input, $product, $view, $id);
     public function uploadImages($config, $input, $image, $product, $file);
-    public function uploadRender($config, $image, $action);
+    public function uploadRender($config, $image, $action, $code);
     // All Colors
     public function colorsStatus($input, $product, $id);
     // Search Products Wishlist/Orders

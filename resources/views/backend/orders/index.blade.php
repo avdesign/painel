@@ -116,12 +116,7 @@
                         </li>
                     @endcan
 
-                        <li>
-                            <a href="gateway/@{{{str_company}}}/@{{{id}}}" class="file-link">
-                                <span class="icon file-dll"></span>
-                                Transações PagSeguro
-                            </a>
-                        </li>
+                        @{{{gateway_link}}}
 
 
                 </ul>
@@ -167,6 +162,7 @@
                         </div>
                         <div class="six-columns">
                             <h4 class="blue underline">Pedido: @{{{reference}}}</h4>
+                            @{{{billet_link}}}
                             <p>Status: <strong> @{{{status_label}}} </strong></p>
                             <p>Gatteway: <strong> @{{{company}}} </strong></p>
                             <p>Pagamento: <strong> @{{{payment}}} </strong></p>
