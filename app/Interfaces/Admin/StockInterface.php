@@ -12,7 +12,6 @@ interface StockInterface
      */
     public function setId($id);
     public function getAll($request);
-    public function entryStock($input, $id);
-    public function exitStock($input, $id);
+    public function update($configProduct, $input, $id);
 
 }

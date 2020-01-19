@@ -6,14 +6,15 @@ use Illuminate\Support\Facades\Gate;
 
 use AVDPainel\Models\Admin\GridProduct as Model;
 use AVDPainel\Interfaces\Admin\StockInterface;
+use AVDPainel\Interfaces\Admin\InventoryInterface as InterInventory;
 use AVDPainel\Interfaces\Admin\ConfigColorPositionInterface as ConfigImage;
 
 class StockRepository implements StockInterface
 {
-
-    public $model;
-    private $photoUrl;
     private $disk;
+    private $model;
+    private $photoUrl;
+    private $interInventory;
 
     /**
      * Create construct.
@@ -22,13 +23,15 @@ class StockRepository implements StockInterface
      */
     public function __construct(
         Model $model,
-        ConfigImage $configImage)
+        ConfigImage $configImage,
+        InterInventory $interInventory)
     {
-        $this->model          = $model;
-        $this->configImage    = $configImage;
-
-        $this->photoUrl      = 'storage/';
         $this->disk           = storage_path('app/public/');
+        $this->model          = $model;
+        $this->photoUrl       = 'storage/';
+        $this->configImage    = $configImage;
+        $this->interInventory = $interInventory;
+
     }
 
     /**
@@ -143,12 +146,12 @@ class StockRepository implements StockInterface
                 }
 
                 if (Gate::allows('stock-exit')) {
-                    $clickExit = "abreModal('Saida: {$val->product->name}', '" . route('stock.exit', $val->id) . "', 'form-stock', 2, 'true',400,350)";
+                    $clickExit = "abreModal('Saida: {$val->product->name}', '" . route('stock.exit', $val->id) . "', 'form-stock', 2, 'true',400,450)";
                     $actions .= '<p><button type="button" onclick="' . $clickExit . '" class="button compact icon-minus red-gradient">' . constLang('exit') . '</button></p>';
                 }
 
                 if (Gate::allows('stock-entry')) {
-                    $clickEntry = "abreModal('Entrada: {$val->product->name}', '".route('stock.entry', $val->id)."', 'form-stock', 2, 'true',400,350)";
+                    $clickEntry = "abreModal('Entrada: {$val->product->name}', '".route('stock.entry', $val->id)."', 'form-stock', 2, 'true',400,450)";
                     $actions .= '<p><button type="button" onclick="'.$clickEntry.'" class="button compact icon-plus blue-gradient">'.constLang('entry').'</button></p>';
                 }
 
@@ -179,14 +182,51 @@ class StockRepository implements StockInterface
     }
 
 
-    public function entryStock($input, $id)
+    public function update($configProduct, $input, $id)
     {
-        dd($input);
-    }
+        $grid = $this->setId($id);
+        $image = $grid->image;
+        $product = $grid->product;
 
-    public function exitStock($input, $id)
-    {
-        dd($input);
+        $success = false;
+        $message = constLang('messages.stock.update_false');
+        if ($input['ac'] == 'entry') {
+
+            $input['input'] = $grid->input + $input['qty'];
+            $input['stock'] = ($grid->input + $input['qty']) - $grid->output;
+            $update = $grid->update($input);
+            if ($update) {
+                $inventory = $this->interInventory->updateStock($configProduct, $grid, $image, $product, $input);
+                $success = true;
+                $message = constLang('messages.stock.entry_true');
+            } else {
+                $message = constLang('messages.stock.update_false');
+            }
+
+        } elseif ($input['ac'] == 'exit') {
+
+            $input['output'] = $grid->output + $input['qty'];
+            $input['stock'] = $grid->input - ($grid->output + $input['qty']);
+            $update = $grid->update($input);
+            if ($update) {
+                $inventory = $this->interInventory->updateStock($configProduct, $grid, $image, $product, $input);
+                $success = true;
+                $message = constLang('messages.stock.exit_true');
+            } else {
+                $message = constLang('messages.stock.update_false');
+            }
+
+        } else {
+            $success = false;
+            $message = constLang('messages.stock.action_null');
+        }
+
+        $out = array(
+            'success' => $success,
+            'message' => $message
+        );
+
+        return response()->json($out);
     }
 
     /**
@@ -199,6 +239,5 @@ class StockRepository implements StockInterface
     {
         return $this->model->find($id);
     }
-
 
 }

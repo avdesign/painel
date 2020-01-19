@@ -89,6 +89,7 @@ return [
     'description_painel' => 'Painel Administrativo',
     'detail' => 'Detalhe',
     'details_view' => 'Ver Detalhes',
+    'difference' => 'Diferença',
     'edit' => 'Editar',
     'entry' => 'Entrada',
     'error' => [
@@ -336,7 +337,11 @@ return [
             'freight' => 'Frete'
         ],
         'stock' => [
-            'title' => 'Controle de Estoque'
+            'title' => 'Controle de Estoque',
+            'entry_true' => 'A quantidade foi adicionada',
+            'exit_true' => 'A quantidade foi removida',
+            'update_false' => 'A quantidade foi registrada',
+            'action_null' => 'Erro: Ação incorreta'
         ]
 
 

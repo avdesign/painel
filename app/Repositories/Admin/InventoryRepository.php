@@ -48,9 +48,10 @@ class InventoryRepository implements InventoryInterface
             0 => 'id',
             1 => 'code',
             2 => 'kit_name',
-            4 => 'stock',
-            3 => 'amount',
-            5 => 'updated_at'
+            3 => 'stock',
+            4 => 'amount',
+            5 => 'difference',
+            6 => 'updated_at'
         );
 
         $totalData = $this->model->count();
@@ -160,29 +161,6 @@ class InventoryRepository implements InventoryInterface
 
     }
 
-    /**
-     * Date: 06/15/2019
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function setId($id)
-    {
-        return $this->model->find($id);
-    }
-
-
-    /**
-     * Date: 06/15/2019
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function getGrids($id)
-    {
-        return $this->model->where('grid_id', $id)->get();
-    }
-
 
 
     /**
@@ -219,12 +197,14 @@ class InventoryRepository implements InventoryInterface
             $dataForm['cost_unit'] = $product->cost->value;
             $dataForm['cost_total'] = $grids->input * $product->cost->value;
             $dataForm['stock'] = (int) $grids->input;
+
+            $data = $this->model->create($dataForm);
+            if ($data) {
+                return $data;
+            }
+
         }
 
-        $data = $this->model->create($dataForm);
-        if ($data) {
-            return $data;
-        }
 
     }
 
@@ -460,10 +440,89 @@ class InventoryRepository implements InventoryInterface
 
 
 
+    public function updateStock($configProduct, $grid, $image, $product, $input)
+    {
+        if ($configProduct->grids == 1) {
+
+            $values = $this->getGrids($grid->id);
+            $count = count($values);
+            if ($count) {
+                foreach ($values as $key => $value) {
+                    if ($key == $count-1) {
+                        $data = $value;
+                    }
+                }
+            }
+
+            if ($input['ac'] == 'entry') {
+                $type_movement = constLang('type_movement.input');
+                $amount = (int)$grid->input + $input['qty'];
+                $difference = $data->difference;
+                $diff_value = $data->diff_value;
+
+            } elseif ($input['ac'] == 'exit') {
+                $type_movement = constLang('type_movement.output');
+                $difference = (int) $data->difference + $input['qty'];
+                $diff_value = $data->diff_value + ($input['qty'] * $product->cost->value);
+                $amount = (int)$grid->input - $input['qty'];
+            }
+
+            $dataForm['product_id'] = $product->id;
+            $dataForm['image_color_id'] = $image->id;
+            $dataForm['grid_id'] = $grid->id;
+            $dataForm['admin_id'] = auth()->user()->id;
+            $dataForm['profile_name'] = constLang('profile_name.admin');
+            $dataForm['type_movement'] = $type_movement;
+            $dataForm['note'] = $input['note'];
+            $dataForm['brand'] = $product->brand;
+            $dataForm['section'] = $product->section;
+            $dataForm['category'] = $product->category;
+            $dataForm['product'] = $product->name;
+            $dataForm['image'] = $image->image;
+            $dataForm['code'] = $image->code;
+            $dataForm['color'] = $image->color;
+            $dataForm['grid'] = $grid->grid;
+            $dataForm['amount'] = $amount;
+            $dataForm['difference'] = $difference;
+            $dataForm['diff_value'] = $diff_value;
+            $dataForm['kit'] = $product->kit;
+            $dataForm['kit_name'] = $product->unit. ' '.$product->measure;
+            $dataForm['units'] = $grid->units;
+            $dataForm['offer'] = $product->offer;
+            $dataForm['cost_unit'] = $product->cost->value;
+            $dataForm['cost_total'] = $grid->input * $product->cost->value;
+            $dataForm['stock'] = (int)$grid->stock;
+
+            $data = $this->model->create($dataForm);
+            if ($data) {
+                return $data;
+            }
+        }
+    }
 
 
+    /**
+     * Date: 06/15/2019
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function setId($id)
+    {
+        return $this->model->find($id);
+    }
 
 
+    /**
+     * Date: 06/15/2019
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function getGrids($id)
+    {
+        return $this->model->where('grid_id', $id)->get();
+    }
 
 
 

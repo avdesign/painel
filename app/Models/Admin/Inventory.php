@@ -24,6 +24,8 @@ class Inventory extends Model
         'color',
         'grid',
         'amount',
+        'difference',
+        'diff_value',
         'kit',
         'kit_name',
         'units',

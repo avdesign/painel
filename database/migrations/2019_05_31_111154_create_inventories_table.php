@@ -35,6 +35,8 @@ class CreateInventoriesTable extends Migration
             $table->string('color', 20)->nullable();
             $table->string('grid')->nullable();
             $table->integer('amount')->default(0);
+            $table->integer('difference')->default(0);
+            $table->decimal('diff_value', 8, 2)->default(0);
             $table->tinyInteger('kit');
             $table->string('kit_name', 30)->nullable();
             $table->tinyInteger('units')->default(0);

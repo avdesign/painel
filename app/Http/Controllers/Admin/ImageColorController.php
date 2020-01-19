@@ -270,7 +270,7 @@ class ImageColorController extends Controller
                     }
                     if ($grids) {
 
-                        $out = $this->interModel->uploadRender($config, $image, $action);
+                        $out = $this->interModel->uploadRender($config, $image, $action, $configProduct->code);
 
                         DB::commit();
 

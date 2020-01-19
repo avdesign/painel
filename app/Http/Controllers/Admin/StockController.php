@@ -2,18 +2,17 @@
 
 namespace AVDPainel\Http\Controllers\Admin;
 
+use AVDPainel\Http\Controllers\Controller;
+use AVDPainel\Http\Requests\Admin\StockRequest;
 use AVDPainel\Interfaces\Admin\StockInterface as InterModel;
 use AVDPainel\Interfaces\Admin\ConfigSystemInterface as ConfigSystem;
 use AVDPainel\Interfaces\Admin\ConfigProductInterface as ConfigProduct;
 use AVDPainel\Interfaces\Admin\ConfigColorPositionInterface as ConfigImage;
 
-
-
-use AVDPainel\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use Gate;
 use DB;
+use Gate;
+use Illuminate\Http\Request;
+
 
 
 class StockController extends Controller
@@ -110,12 +109,25 @@ class StockController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(StockRequest $request, $id)
     {
         $dataForm = $request->all();
+        if ($dataForm['ac'] == 'entry') {
+            if( Gate::denies("stock-entry") ) {
+                return view("backend.erros.message-401");
+            }
+        }
+        if ($dataForm['ac'] == 'exit') {
+            if( Gate::denies("stock-exit") ) {
+                return view("backend.erros.message-401");
+            }
+        }
+
         $configProduct = $this->configProduct->setId(1);
 
-        return $dataForm;
+        $data = $this->interModel->update($configProduct, $dataForm, $id);
+
+        return $data;
     }
 
 }

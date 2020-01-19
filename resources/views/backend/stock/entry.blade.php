@@ -7,7 +7,7 @@
     <div class="eight-columns twelve-columns-mobile">
         <p class="underline"><strong>{{$product->kit_name}} {{$product->unit}} {{$product->measure}}</strong></p>
         <p class="underline">Grade: <strong>{{$data->grid}}</strong></p>
-        <p class="underline">Entrada: <strong>({{$data->input}}</strong></p>
+        <p class="underline">Entrada: <strong>{{$data->input}}</strong></p>
         <p class="underline">Saida: <strong>{{$data->output}}</strong></p>
         <p class="underline">Total: <strong>{{$data->stock}}</strong></p>
     </div>
@@ -41,7 +41,15 @@
                 </p>
             @endif
 
-            <p class="button-height align-center">
+            <p class="button-height block-label">
+                <label for="input" class="label">
+                    <small>Descreva o motivo</small>
+                    Observação
+                </label>
+                <textarea name="note" rows="3" class="input full-width"></textarea>
+            </p>
+
+            <p class="button-height align-center margin-top">
                 <span class="button-group">
                     <button onclick="fechaModal()" class="button"> Cancelar </button>
                     <button id="btn-modal" onclick="formStock('entry', '{{$data->id}}')" class="button blue-gradient">
