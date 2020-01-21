@@ -252,4 +252,33 @@ class StockRepository implements StockInterface
         return $this->model->find($id);
     }
 
+
+    /**
+     * Verifica se existe o produto no estoque
+     *
+     * @param $configProduct
+     * @param $product
+     * @return array
+     */
+    public function existStock($configProduct, $product)
+    {
+        if ($product->stock == 1) {
+            if ($configProduct->grids == 1) {
+                $qty=0;
+                foreach ($product->grids as $grid) {
+                    $qty += $grid->stock;
+                }
+
+                if ($qty >= 1) {
+                    $out = array(
+                        'success' => false,
+                        'message' => constLang('messages.stock.remove_stock')
+                    );
+                    return $out;
+                }
+            }
+        }
+    }
+
+
 }

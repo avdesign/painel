@@ -4,12 +4,12 @@ namespace AVDPainel\Http\Controllers\Admin;
 
 use AVDPainel\Http\Requests\Admin\ProductColorRequest as ReqModel;
 
+use AVDPainel\Interfaces\Admin\StockInterface as InterStock;
 use AVDPainel\Interfaces\Admin\ConfigKitInterface as ConfigKit;
 use AVDPainel\Interfaces\Admin\ProductInterface as InterProduct;
 use AVDPainel\Interfaces\Admin\GridProductInterface as InterGrid;
 use AVDPainel\Interfaces\Admin\GroupColorInterface as InterGroup;
 use AVDPainel\Interfaces\Admin\ImageColorInterface as InterModel;
-use AVDPainel\Interfaces\Admin\InventoryInterface as InterInventory;
 use AVDPainel\Interfaces\Admin\ConfigSystemInterface as ConfigSystem;
 use AVDPainel\Interfaces\Admin\ConfigColorGroupInterface as InterHexa;
 use AVDPainel\Interfaces\Admin\ConfigProductInterface as ConfigProduct;
@@ -34,10 +34,10 @@ class ImageColorController extends Controller
         ConfigSystem $confUser,
         InterGroup $interGroup,
         InterModel $interModel,
+        InterStock $interStock,
         ConfigImage $configImage,
         InterProduct $interProduct,
-        ConfigProduct $configProduct,
-        InterInventory $interInventory)
+        ConfigProduct $configProduct)
     {
         $this->middleware('auth:admin');
 
@@ -47,11 +47,10 @@ class ImageColorController extends Controller
         $this->interGrid      = $interGrid;
         $this->interGroup     = $interGroup;
         $this->interModel     = $interModel;
+        $this->interStock     = $interStock;
         $this->configImage    = $configImage;
         $this->interProduct   = $interProduct;
         $this->configProduct  = $configProduct;
-        $this->interInventory = $interInventory;
-
     }
 
     /**
@@ -296,13 +295,18 @@ class ImageColorController extends Controller
             return view("backend.erros.message-401");
         }
 
+        $configProduct = $this->configProduct->setId(1);
+        $image = $this->interModel->setId($id);
+        $product = $image->product;
+        $existStock = $this->interStock->existStock($configProduct, $product);
+        if ($existStock) {
+            return response()->json($existStock);
+        }
+
         try{
             DB::beginTransaction();
-
             $config  = $this->configImage->get();
-            $image   = $this->interModel->setId($id);
-            $product = $image->product;
-            $configProduct = $this->configProduct->setId(1);
+
             if ($configProduct->grids == 1) {
                 if ($product->kit == 1) {
                     $grids = $this->interGrid->deleteKit($configProduct, $image, $product);

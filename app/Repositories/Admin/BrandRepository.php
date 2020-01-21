@@ -22,11 +22,13 @@ class BrandRepository implements BrandInterface
      *
      * @return void
      */
-    public function __construct(Model $model, Keywords $keywords)
+    public function __construct(
+        Model $model,
+        Keywords $keywords)
     {
-        $this->model    = $model;
+        $this->disk = storage_path('app/public/');
+        $this->model = $model;
         $this->keywords = $keywords;
-        $this->disk     = storage_path('app/public/');
     }
 
     /**
@@ -264,15 +266,12 @@ class BrandRepository implements BrandInterface
      * @param  int  $configImages
      * @return array
      */
-    public function delete($id, $config, $configImages)
+    public function delete($data, $products, $config, $configImages)
     {
-
 
         $total_products = 0;
         $colors         = 0;
-        $data           = $this->model->find($id);
         $images         = $data->images;
-        $products       = $data->products;
 
         if (count($products) >= 1) {
             $p=1;
@@ -329,7 +328,7 @@ class BrandRepository implements BrandInterface
                 ', Descrição:'.$data->description.
                 ', Tags:'.$data->tags)
             );
-            
+
             $data['total_colors']   = $colors;
             $data['total_products'] = $total_products;
 
@@ -337,6 +336,7 @@ class BrandRepository implements BrandInterface
         }
 
         return false;
+
     }
 
 }

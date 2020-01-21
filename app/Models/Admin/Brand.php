@@ -50,8 +50,6 @@ class Brand extends Model
         $this->attributes['email'] = strtolower($value);
     }
 
-    //test
-
 
     /**
      * Grids

@@ -102,14 +102,13 @@ class GridProductRepository implements GridProductInterface
 
 
     /**
-     * Date: 06/12/2019
+     * Date: 01/21/2020
      * Note: return empty -> invetary(empty)
      *
+     * @param $configProduct
      * @param $input
      * @param $image
      * @param $product
-     * @param $qty
-     * @param $des
      */
     public function updateKit($configProduct, $input, $image, $product)
     {
@@ -124,10 +123,10 @@ class GridProductRepository implements GridProductInterface
             $entry = $input['input'];
             if (!empty($entry)) {
 
-                $dataForm['entry'] = $data->input; // inventory -> ammount
-                $dataForm['grid'] = $data->grid; // inventory -> grid
-                $dataForm['grid_id'] = $data->id; // inventory -> grid_id
-                $dataForm['previous_stock'] = $data->stock; // inventory -> grid
+                $dataForm['entry'] = $data->input;
+                $dataForm['grid'] = $data->grid;
+                $dataForm['grid_id'] = $data->id;
+                $dataForm['previous_stock'] = $data->stock;
                 $previousInput = $data->input;
                 $currentInput = $previousInput + $entry;
                 $previousStock = $data->stock;
@@ -144,8 +143,8 @@ class GridProductRepository implements GridProductInterface
                 $dataForm['qty_max'] = $input['qty_max'];
                 $change = ' Qtd Max:'.$input['qty_max'];
             }
-
         }
+
         if ($change){
             $update = $data->update($dataForm);
             if ($update) {
@@ -180,9 +179,9 @@ class GridProductRepository implements GridProductInterface
      */
     public function deleteKit($configProduct, $image, $product)
     {
-
         if ($product->stock == 1) {
             foreach ($image->grids as $grid) {
+                dd($grid);
                 $inventory = $this->interInventory->deleteKit($configProduct, $product, $image, $grid);
             }
             return $inventory;
@@ -628,6 +627,8 @@ class GridProductRepository implements GridProductInterface
 
         return $units;
     }
+
+
 
 
 }

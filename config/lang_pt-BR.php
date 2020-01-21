@@ -332,11 +332,12 @@ return [
             'freight' => 'Frete'
         ],
         'stock' => [
-            'create' => 'adicionou um produto novo no estoque',
+            'create' => 'adicionou um novo produto, estoque',
             'update' => 'alterou a quantidade do produto no estoque',
             'delete' => 'excluiu o produto com o estoque de',
             'title' => 'Controle de Estoque',
             'update_false' => 'A alteração não foi registrada',
+            'remove_stock' => 'Este produto não pode ser excluído, consta no estoque.',
             'output_greater' => 'A quantidade tem de ser igual ou inferior do total do estoque.',
             'action_null' => 'Erro: Ação incorreta',
             'movement_text' => [

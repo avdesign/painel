@@ -15,7 +15,7 @@ interface BrandInterface
     public function setId($id);
     public function create($input);
     public function update($input, $id);
-    public function delete($id, $config, $configImages);
+    public function delete($data, $products, $config, $configImages);
     public function rules($input, $messages, $id);
 
 }

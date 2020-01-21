@@ -271,14 +271,13 @@ class CategoryRepository implements CategoryInterface
      * @param  int  $configImages
      * @return array
      */
-    public function delete($id, $config, $configImages)
+    public function delete($data, $products, $config, $configImages)
     {
         $total_products = 0;
         $colors         = 0;
         $data           = $this->model->find($id);
         $section        = $this->interSection->setId($data->section_id);
-        $products       = $data->products;
-        $images         = $data->images;        
+        $images         = $data->images;
 
         if (count($products) >= 1) {
             $p=1;

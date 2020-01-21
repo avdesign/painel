@@ -13,5 +13,6 @@ interface StockInterface
     public function setId($id);
     public function getAll($request);
     public function update($configProduct, $input, $id);
+    public function existStock($configProduct, $product);
 
 }

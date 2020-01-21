@@ -242,16 +242,13 @@ class SectionRepository implements SectionInterface
      * @param  int  $configImages
      * @return array
      */
-    public function delete($id, $config, $configImages)
+    public function delete($data, $products, $config, $configImages)
     {
-        $data   = $this->model->find($id);
 
         $total_products   = 0;
         $total_categories = 0;
         $colors           = 0;
         $categories       = $data->categories;
-        $products         = $data->products;
-
         
         if (count($products) >= 1) {
             $p=1;

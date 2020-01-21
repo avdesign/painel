@@ -6,7 +6,7 @@ use AVDPainel\Http\Controllers\Controller;
 
 use AVDPainel\Http\Requests\Admin\ProductRequest as ReqModel;
 
-
+use AVDPainel\Interfaces\Admin\StockInterface as InterStock;
 use AVDPainel\Interfaces\Admin\BrandInterface as InterBrand;
 use AVDPainel\Interfaces\Admin\ProductInterface as InterModel;
 use AVDPainel\Interfaces\Admin\ConfigKitInterface as ConfigKit;
@@ -48,6 +48,7 @@ class ProductController extends Controller
         InterAccess $access,
         ConfigKit $configKit,
         InterModel $interModel,
+        InterStock $interStock,
         InterBrand $interBrand,
         ConfigSystem $confUser,
         ProductCost $productCost,
@@ -66,6 +67,7 @@ class ProductController extends Controller
         $this->confUser           = $confUser;
         $this->configKit          = $configKit;
         $this->interModel         = $interModel;
+        $this->interStock         = $interStock;
         $this->interBrand         = $interBrand;
         $this->productCost        = $productCost;
         $this->productPrice       = $productPrice;
@@ -368,13 +370,19 @@ class ProductController extends Controller
         if( Gate::denies("{$this->ability}-delete") ) {
             return view("backend.erros.message-401");
         }
+        $configProduct = $this->configProduct->setId(1);
+        $product = $this->interModel->setId($id);
+
+        $existStock = $this->interStock->existStock($configProduct, $product);
+        if ($existStock) {
+            return response()->json($existStock);
+        }
+
 
         try{
             DB::beginTransaction();
 
-            $configProduct = $this->configProduct->setId(1);
             $config  = $this->configImageProduct->get();
-            $product = $this->interModel->setId($id);
 
             $delete = $this->interModel->delete($configProduct, $config, $product);
             if ($delete) {

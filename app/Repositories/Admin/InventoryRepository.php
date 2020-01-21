@@ -133,10 +133,10 @@ class InventoryRepository implements InventoryInterface
     }
 
     /**
-     * Date: 02/06/2019
+     * Date: 01/21/2020
      *
      * @param $configProduct
-     * @param $grids
+     * @param $grid
      * @param $image
      * @param $product
      * @return mixed
@@ -150,7 +150,7 @@ class InventoryRepository implements InventoryInterface
                 'movement_qty' => $grid->input,
                 'cost_total' => $grid->input * $product->cost->value,
                 'stock' => (int) $grid->stock,
-                'note' => auth()->user()->name. ' '.constLang('messages.stock.create')
+                'note' => auth()->user()->name. ' '.constLang('messages.stock.create').' '.$grid->input,
             ];
             $parameters = array_merge($movement, $this->getParameters($product, $image, $grid));
             $data = $this->model->create($parameters);
@@ -162,14 +162,14 @@ class InventoryRepository implements InventoryInterface
     }
 
     /**
-     * Date: 06/04/2019
+     * Date: 01/21/2020
      *
      * @param $configProduct
-     * @param $grids
+     * @param $grid
      * @param $image
      * @param $product
-     * @param $photo
-     * @return mixed
+     * @param $entry
+     * @return bool
      */
     public function updateKit($configProduct, $grid, $image, $product, $entry)
     {
@@ -216,9 +216,9 @@ class InventoryRepository implements InventoryInterface
             }
 
             $movement = [
-                'previous' => (int) $grid->input,
+                'previous' => (int) $grid->stock,
                 'movement_type' => constLang('messages.stock.movement_text.delete'),
-                'movement_qty' => 0,
+                'movement_qty' => (int) $grid->stock,
                 'diff_value' => $diff_value,
                 'diff_qty' => $diff_qty,
                 'cost_total' => $grid->input * $product->cost->value,
@@ -226,6 +226,8 @@ class InventoryRepository implements InventoryInterface
                 'note' => auth()->user()->name. ' '.constLang('messages.stock.deleted_stock').' '.$stock
 
             ];
+
+            dd($movement);
 
             $parameters = array_merge($movement, $this->getParameters($product, $image, $grid));
             $data = $this->model->create($parameters);
