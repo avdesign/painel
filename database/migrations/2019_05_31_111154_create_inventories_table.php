@@ -24,7 +24,6 @@ class CreateInventoriesTable extends Migration
                 constLang('profile_name.admin'),
                 constLang('profile_name.user')
             ]);
-            $table->string('type_movement', 100)->nullable();
             $table->text('note')->nullable();
             $table->string('brand', 30);
             $table->string('section', 30);
@@ -34,9 +33,12 @@ class CreateInventoriesTable extends Migration
             $table->string('code');
             $table->string('color', 20)->nullable();
             $table->string('grid')->nullable();
-            $table->integer('amount')->default(0);
-            $table->integer('difference')->default(0);
+            $table->integer('previous')->default(0);
+            $table->tinyInteger('motive')->nullable();
+            $table->string('movement_type', 100)->nullable();
+            $table->tinyInteger('movement_qty')->default(0);
             $table->decimal('diff_value', 8, 2)->default(0);
+            $table->integer('diff_qty')->default(0);
             $table->tinyInteger('kit');
             $table->string('kit_name', 30)->nullable();
             $table->tinyInteger('units')->default(0);

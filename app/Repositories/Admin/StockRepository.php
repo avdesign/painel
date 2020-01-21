@@ -146,7 +146,7 @@ class StockRepository implements StockInterface
                 }
 
                 if (Gate::allows('stock-exit')) {
-                    $clickExit = "abreModal('Saida: {$val->product->name}', '" . route('stock.exit', $val->id) . "', 'form-stock', 2, 'true',400,450)";
+                    $clickExit = "abreModal('Saida: {$val->product->name}', '" . route('stock.exit', $val->id) . "', 'form-stock', 2, 'true',400,480)";
                     $actions .= '<p><button type="button" onclick="' . $clickExit . '" class="button compact icon-minus red-gradient">' . constLang('exit') . '</button></p>';
                 }
 
@@ -198,23 +198,35 @@ class StockRepository implements StockInterface
             if ($update) {
                 $inventory = $this->interInventory->updateStock($configProduct, $grid, $image, $product, $input);
                 $success = true;
-                $message = constLang('messages.stock.entry_true');
+                $message = constLang('messages.stock.movement_text.input');
             } else {
                 $message = constLang('messages.stock.update_false');
             }
 
         } elseif ($input['ac'] == 'exit') {
 
-            $input['output'] = $grid->output + $input['qty'];
-            $input['stock'] = $grid->input - ($grid->output + $input['qty']);
-            $update = $grid->update($input);
-            if ($update) {
-                $inventory = $this->interInventory->updateStock($configProduct, $grid, $image, $product, $input);
-                $success = true;
-                $message = constLang('messages.stock.exit_true');
+            if ($input['qty'] > $grid->stock) {
+                $success = false;
+                $message = constLang('messages.stock.output_greater');
+
             } else {
-                $message = constLang('messages.stock.update_false');
+                if ($input['motive'] == 1) {
+                    $input['output'] = $grid->output - $input['qty'];
+                    $input['stock'] = $grid->stock + $input['qty'];
+                } else {
+                    $input['output'] = $grid->output + $input['qty'];
+                    $input['stock'] = $grid->input - ($grid->output + $input['qty']);
+                }
+                $update = $grid->update($input);
+                if ($update) {
+                    $inventory = $this->interInventory->updateStock($configProduct, $grid, $image, $product, $input);
+                    $success = true;
+                    $message = constLang('messages.stock.movement_text.output');
+                } else {
+                    $message = constLang('messages.stock.update_false');
+                }
             }
+
 
         } else {
             $success = false;

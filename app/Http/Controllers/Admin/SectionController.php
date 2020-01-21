@@ -23,6 +23,8 @@ class SectionController extends AdminAjaxTablesController
     protected $upload;
     protected $last_url;
     protected $messages;
+    protected $configImages = true;
+
 
     public function __construct(
         InterAccess $access,

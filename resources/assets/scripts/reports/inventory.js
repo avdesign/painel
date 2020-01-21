@@ -49,9 +49,9 @@
                     }
                 },
                 {data: 'code'},
-                {data: 'kit_name'},
+                {data: 'product'},
                 {data: 'stock'},
-                {data: 'amount'},
+                {data: 'previous'},
                 {data: "updated_at", className:'align-center'},
                 {data:null, className:'details-control', orderable:false, searchable:false, defaultContent: ''}
             ],

@@ -206,7 +206,7 @@ class ProductController extends Controller
                 $configProduct = $this->configProduct->setId(1);
                 // Gerar o código automático
                 if ($configProduct->code == 1) {
-                    $code = "{$data->brand_id}-{$data->section_id}-{$data->category_id}-{$data->id}-01";
+                    $code = "{$data->id}-01";
                 }
 
                 $prices = $this->productPrice->create($dataForm['price'], $data->id, $data->offer, $configProduct->price_default);

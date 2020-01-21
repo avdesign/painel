@@ -1,4 +1,4 @@
-<span class="black">{{constLang('cost')}}:</span> {{$collect->cost_total}}<br>
+<span class="black">{{constLang('cost')}}:</span> {{setReal($collect->cost_total)}}<br>
 @if($collect->price_profile != null)
     <span class="icon-user black">{{constLang('profile')}}:</span> {{$collect->price_profile}}<br>
 @else

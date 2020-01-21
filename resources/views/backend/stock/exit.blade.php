@@ -2,6 +2,12 @@
 
     <div class="four-columns twelve-columns-mobile">
         <img src="{{$image}}">
+
+        <ul class="blocks-list fixed-size-100 ">
+            @if($data->image->cover == 1)
+                <li>{{constLang('image')}} {{constLang('cover')}}</li>
+            @endif
+        </ul>
     </div>
 
     <div class="eight-columns twelve-columns-mobile">
@@ -39,6 +45,25 @@
                     </span>
                 </p>
             @endif
+            <p class="button-height">
+                <span class="button-group">
+                    <label for="qty-min-max" class="button blue-gradient">
+                        <span class="small-margin-right">{{constLang('messages.inventory.motive.label')}}</span>
+                    </label>
+                    <label for="motive-1" class="button green-active">
+                        <input type="radio" name="motive" id="motive-1" value="1" checked>
+                        {{constLang('messages.inventory.motive.1')}}
+                    </label>
+                    <label for="motive-2" class="button green-active">
+                        <input type="radio" name="motive" id="motive-2" value="2">
+                        {{constLang('messages.inventory.motive.2')}}
+                    </label>
+                    <label for="motive-3" class="button green-active">
+                        <input type="radio" name="motive" id="motive-3" value="3">
+                        {{constLang('messages.inventory.motive.3')}}
+                    </label>
+                </span>
+            </p>
             <p class="button-height block-label">
                 <label for="input" class="label">
                     <small>Descreva o motivo</small>

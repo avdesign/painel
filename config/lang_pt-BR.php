@@ -189,11 +189,6 @@ return [
     'title_update' => 'Alterar',
     'total' => 'Total',
     'trend' => 'Têndencia',
-    'type_movement' => [
-        'input' => 'Entrada',
-        'output' => 'Saida',
-        'delete' => 'Exclusão'
-    ],
     'units' => 'Unidades',
     'update' => 'Alterar',
     'updated' => 'Alterou',
@@ -337,12 +332,31 @@ return [
             'freight' => 'Frete'
         ],
         'stock' => [
+            'create' => 'adicionou um produto novo no estoque',
+            'update' => 'alterou a quantidade do produto no estoque',
+            'delete' => 'excluiu o produto com o estoque de',
             'title' => 'Controle de Estoque',
-            'entry_true' => 'A quantidade foi adicionada',
-            'exit_true' => 'A quantidade foi removida',
-            'update_false' => 'A quantidade foi registrada',
-            'action_null' => 'Erro: Ação incorreta'
-        ]
+            'update_false' => 'A alteração não foi registrada',
+            'output_greater' => 'A quantidade tem de ser igual ou inferior do total do estoque.',
+            'action_null' => 'Erro: Ação incorreta',
+            'movement_text' => [
+                'input' => 'Entrada',
+                'output' => 'Saida',
+                'delete' => 'Exclusão'
+            ],
+
+        ],
+        'inventory' => [
+            'change' => 'alterou a quantidade do estoque de',
+            'entry' => 'deu entrada no estoque de',
+            'exit' => 'deu saida no estoque de',
+            'motive' => [
+                1 => 'Devolução',
+                2 => 'Extraviado',
+                3 => 'Com Defeito',
+                'label' => 'Motivo',
+            ]
+        ],
 
 
 

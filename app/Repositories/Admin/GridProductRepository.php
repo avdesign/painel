@@ -111,7 +111,7 @@ class GridProductRepository implements GridProductInterface
      * @param $qty
      * @param $des
      */
-    public function updateKit($configProduct, $input, $image, $product, $qty, $des)
+    public function updateKit($configProduct, $input, $image, $product)
     {
         $data = $this->setId($input['id']);
 
@@ -123,7 +123,8 @@ class GridProductRepository implements GridProductInterface
         if ($product->stock == 1) {
             $entry = $input['input'];
             if (!empty($entry)) {
-                $dataForm['entry'] = $entry; // inventory -> ammount
+
+                $dataForm['entry'] = $data->input; // inventory -> ammount
                 $dataForm['grid'] = $data->grid; // inventory -> grid
                 $dataForm['grid_id'] = $data->id; // inventory -> grid_id
                 $dataForm['previous_stock'] = $data->stock; // inventory -> grid
@@ -153,9 +154,7 @@ class GridProductRepository implements GridProductInterface
                         ' '.constLang('grid').$change)
                 );
                 if ($product->stock == 1) {
-                    $data['entry'] = $input['input'];
-                    $data['previous_stock'] = $data->id;
-                    $inventory = $this->interInventory->updateKit($configProduct, $data, $image, $product);
+                    $inventory = $this->interInventory->updateKit($configProduct, $data, $image, $product, $entry);
                     if ($inventory) {
                         return $inventory;
                     }

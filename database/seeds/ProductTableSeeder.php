@@ -28,8 +28,8 @@ class ProductTableSeeder extends Seeder
 
         $id_section    = mt_rand(1, '34680');
         $id_category   = mt_rand(1, '43579');
-        $id_product    = mt_rand(1, '57531');
-        $id_color      = mt_rand(1, '66420');
+        $id_product    = mt_rand(1, '2753191');
+        $id_color      = mt_rand(1, '16420');
 
         $date = date('Y-m-d H:i:s');
 
@@ -178,7 +178,7 @@ class ProductTableSeeder extends Seeder
             'category_id' => $id_category,
             'type' => 'unit',
             'name' => 'Unidade',
-            'label' => 'P,M,G,GG',
+            'label' => '33-34,35-36,37-38,39-40',
             'created_at' => $date
         ]);
         // gris category 1 kit
@@ -186,8 +186,18 @@ class ProductTableSeeder extends Seeder
             'id' => $id_grid_category+1,
             'category_id' => $id_category,
             'type' => 'kit',
-            'name' => 'Kit',
-            'label' => '2/33,1/34,2/35,4/36,1/37,2/38',
+            'name' => 'Caixa C/12',
+            'label' => '1/33-34,4/35-36,5/37-38,2/39-40',
+            'created_at' => $date
+        ]);
+
+        // gris category 1 kit
+        GridCategory::create([
+            'id' => $id_grid_category+2,
+            'category_id' => $id_category,
+            'type' => 'kit',
+            'name' => 'Caixa C/6',
+            'label' => '1/33-34,2/35-36,2/37-38,1/39-40',
             'created_at' => $date
         ]);
 

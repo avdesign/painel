@@ -274,12 +274,18 @@ class ConfigModulesTableSeeder extends Seeder
         ConfigModule::create([
             'type' => 'A',
             'name' => 'Inventário',
-            'label' => 'Inventaŕio de entrada e saida do estoque',
+            'label' => 'Inventaŕio de todas as entradas e saidas do estoque',
             'order' => '12',
             'created_at' => $date
         ]);
 
-
+        ConfigModule::create([
+            'type' => 'A',
+            'name' => 'Controle de Estoque',
+            'label' => 'Controle da entrada e saida do estoque',
+            'order' => '13',
+            'created_at' => $date
+        ]);
 
     }
 
@@ -323,6 +329,7 @@ class ConfigModulesTableSeeder extends Seeder
     | 31- Manipulação das imagens do site
     | 32- Conteúdos do site
     | 33- Inventário do Estoque
+    | 34- Controle de Estoque
 
     */    
 }

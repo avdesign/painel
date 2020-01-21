@@ -5,10 +5,6 @@ use Illuminate\Support\Facades\DB;
 
 class ConfigPermissionsTableSeeder extends Seeder
 {
-
-
-
-
     /**
      * Criar as permissões padrões do sistema.
      *
@@ -2622,7 +2618,7 @@ class ConfigPermissionsTableSeeder extends Seeder
         DB::table('config_permissions')->insert([
             'module_id' => 30,
             'name' => 'config-slider-update',
-            'label' => 'Visualizar',
+            'label' => 'Editar',
             'created_at' => $date
         ]);
         /************* Permissions ************/
@@ -2669,7 +2665,7 @@ class ConfigPermissionsTableSeeder extends Seeder
         DB::table('config_permissions')->insert([
             'module_id' => 31,
             'name' => 'images-site-create',
-            'label' => 'Visualizar',
+            'label' => 'Adicionar',
             'created_at' => $date
         ]);
         /************* Permissions ************/
@@ -2690,7 +2686,7 @@ class ConfigPermissionsTableSeeder extends Seeder
         DB::table('config_permissions')->insert([
             'module_id' => 31,
             'name' => 'images-site-update',
-            'label' => 'Visualizar',
+            'label' => 'Editar',
             'created_at' => $date
         ]);
         /************* Permissions ************/
@@ -2711,7 +2707,7 @@ class ConfigPermissionsTableSeeder extends Seeder
         DB::table('config_permissions')->insert([
             'module_id' => 31,
             'name' => 'images-site-delete',
-            'label' => 'Visualizar',
+            'label' => 'Excluir',
             'created_at' => $date
         ]);
         /************* Permissions ************/
@@ -2779,7 +2775,7 @@ class ConfigPermissionsTableSeeder extends Seeder
         DB::table('config_permissions')->insert([
             'module_id' => 32,
             'name' => 'contents-site-update',
-            'label' => 'Visualizar',
+            'label' => 'Editar',
             'created_at' => $date
         ]);
         /************* Permissions ************/
@@ -2800,7 +2796,7 @@ class ConfigPermissionsTableSeeder extends Seeder
         DB::table('config_permissions')->insert([
             'module_id' => 32,
             'name' => 'contents-site-delete',
-            'label' => 'Visualizar',
+            'label' => 'Excluir',
             'created_at' => $date
         ]);
         /************* Permissions ************/
@@ -2843,6 +2839,58 @@ class ConfigPermissionsTableSeeder extends Seeder
             'config_profile_id' => 4
         ]);
 
+
+        /*
+        ----------------------------------------
+         34- Controle de Estoque
+        ----------------------------------------
+        */
+        /************* View ************/
+        DB::table('config_permissions')->insert([
+            'module_id' => 34,
+            'name' => 'stock-view',
+            'label' => 'Visualizar',
+            'created_at' => $date
+        ]);
+        /************* Permissions ************/
+        DB::table('config_permission_config_profile')->insert([
+            'config_permission_id' => $id + 155,
+            'config_profile_id' => 2
+        ]);
+        DB::table('config_permission_config_profile')->insert([
+            'config_permission_id' => $id + 155,
+            'config_profile_id' => 3
+        ]);
+        DB::table('config_permission_config_profile')->insert([
+            'config_permission_id' => $id + 155,
+            'config_profile_id' => 4
+        ]);
+
+        /************* Entry ************/
+        DB::table('config_permissions')->insert([
+            'module_id' => 34,
+            'name' => 'stock-entry',
+            'label' => 'Entrada',
+            'created_at' => $date
+        ]);
+        /************* Permissions ************/
+        DB::table('config_permission_config_profile')->insert([
+            'config_permission_id' => $id + 156,
+            'config_profile_id' => 2
+        ]);
+
+        /************* Exit ************/
+        DB::table('config_permissions')->insert([
+            'module_id' => 34,
+            'name' => 'stock-exit',
+            'label' => 'Saida',
+            'created_at' => $date
+        ]);
+        /************* Permissions ************/
+        DB::table('config_permission_config_profile')->insert([
+            'config_permission_id' => $id + 157,
+            'config_profile_id' => 2
+        ]);
 
     }
 
@@ -3048,6 +3096,14 @@ class ConfigPermissionsTableSeeder extends Seeder
     |     - contents-site-delete
     | 33- Inventário do Estoque
     |     - inventory-view
+    | 34- Controle de Estoque
+    |     - stock-view
+    |     - stock-entry
+    |     - stock-exit
+    |
+    |
+    |
+    |
     |
     |
     */

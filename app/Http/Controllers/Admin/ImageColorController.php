@@ -262,9 +262,7 @@ class ImageColorController extends Controller
 
                 if ($configProduct->grids == 1) {
                     if ($product->kit == 1) {
-                        $qty = $request['qty'];
-                        $des = $request['des'];
-                        $grids = $this->interGrid->updateKit($configProduct, $request['grids'], $image, $product, $qty, $des);
+                        $grids = $this->interGrid->updateKit($configProduct, $request['grids'], $image, $product);
                     } else {
                         $grids = true;
                     }

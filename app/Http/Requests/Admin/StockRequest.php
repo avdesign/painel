@@ -34,6 +34,11 @@ class StockRequest extends FormRequest
      */
     public function rules()
     {
+        $ac = $this->get('ac');
+        if ($ac == 'exit') {
+            $rules['motive'] = "required";
+        }
+
         $config = $this->configProduct->setId(1);
 
         $rules['ac'] = "required";
@@ -48,7 +53,7 @@ class StockRequest extends FormRequest
             $rules['qty_max'] = "required|numeric|min:1";
         }
 
-        $rules['note'] = "required|min:5";
+        $rules['note']   = "required|min:5";
 
 
         return $rules;
@@ -70,7 +75,7 @@ class StockRequest extends FormRequest
             'qty_max.min'       => 'A quantidade maxima deve ser no minímo 1',
             'note.required'     => 'A observação é obrigatória',
             'note.min'          => 'A observação deve ter no minímo 5 caracteries',
-
+            'motive'            => 'O motivo é obrigatório',
         ];
 
 
