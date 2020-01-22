@@ -12,6 +12,7 @@ use AVDPainel\Interfaces\Admin\ConfigColorPositionInterface as ConfigImage;
 class StockRepository implements StockInterface
 {
     private $disk;
+    private $view = 'backend.stock';
     private $model;
     private $photoUrl;
     private $interInventory;
@@ -97,65 +98,25 @@ class StockRepository implements StockInterface
         {
             foreach ($query as $val){
 
+                $image = $val->image;
+                $product = $val->product;
+                $photoUrl = $this->photoUrl;
 
-                if ($val->image != '') {
-                    $image = '<a href="javascript:void(0)"><img id="img-'.$val->id.'" src="'.url($this->photoUrl.$path.$val->image->image).'" width="80" /></a>';
-                } else {
-                    $image = '<img src="'.url('backend/img/default/no_image.png').'" />';
-                }
-
-                ($val->image->cover == 1 ? $cover   = '<p><small class="tag">Capa</small></p>' : $cover = '');
-
-
-                $description  = '';
-                $description .= "<p>{$val->product->brand}</p>";
-                $description .= "<p>{$val->product->category}</p>";
-                $description .= "<p>{$val->product->section}</p>";
-
-
-                $reference  = '';
-                $reference .= "<p>Código: <strong>{$val->image->code}</strong></p>";
-                $reference .= "<p>Ref.Produto: <strong>{$val->product_id}</strong></p>";
-                $reference .= "<p>Ref Cor: <strong>{$val->image_color_id}</strong></p>";
-
-                $grid  = '';
-                $grid .= "<p>{$val->product->kit_name}<strong> {$val->product->unit} {$val->product->measure}</strong></p>";
-                $grid .= "<p><strong>{$val->grid}</strong></p>";
-                $grid .= "<p>Cor: <strong>{$val->color}</strong></p>";
-
-                $stock  = "";
-                $stock .= "<p>Entrada: <strong>{$val->input}</strong></p>";
-                $stock .= "<p>Saida: <strong>{$val->output}</strong></p>";
-                $stock .= "<p>Total: <strong>{$val->stock}</strong></p>";
-
-                $quantity = '';
-                $quantity .= "<p>Mínimo: <strong>{$val->qty_min}</strong></p>";
-                $quantity .= "<p>Máximo: <strong>{$val->qty_max}</strong></p>";
-
-                $actions = '';
-                if ($val->image->active == constLang('active_true')) {
-                    $active = constLang('active_false');
-                    $clickStatus = "statusCatalog('{$val->image_color_id}','".route('status.catalog', $val->image_color_id)."','{$active}','".csrf_token()."')";
-                    $actions .= '<p id="status-'.$val->image_color_id.'"><button type="button" id="status-'.$val->image_color_id.'" onclick="'.$clickStatus.'" class="button compact icon-tick green-gradient">'.constLang('active_true').'</button></p>';
-
-                } else {
-                    $active = constLang('active_true');
-                    $clickStatus = "statusCatalog('{$val->image_color_id}','".route('status.catalog', $val->image_color_id)."', '{$active}','".csrf_token()."')";
-                    $actions .= '<p id="status-'.$val->image_color_id.'"><button type="button" onclick="'.$clickStatus.'" class="button compact grey-gradient">'.constLang('active_true').'</button></p>';
-
-                }
-
-                if (Gate::allows('stock-exit')) {
-                    $clickExit = "abreModal('Saida: {$val->product->name}', '" . route('stock.exit', $val->id) . "', 'form-stock', 2, 'true',400,480)";
-                    $actions .= '<p><button type="button" onclick="' . $clickExit . '" class="button compact icon-minus red-gradient">' . constLang('exit') . '</button></p>';
-                }
-
+                $photo = view("{$this->view}.render.image", compact('path','image', 'photoUrl'))->render();
+                $description = view("{$this->view}.render.description", compact('product'))->render();
+                $reference = view("{$this->view}.render.reference", compact('image', 'product'))->render();
+                $grid = view("{$this->view}.render.grid", compact('val', 'product'))->render();
+                $stock = view("{$this->view}.render.stock", compact('val'))->render();
+                $quantity = view("{$this->view}.render.quantity", compact('val'))->render();
+                $actions = view("{$this->view}.render.actions", compact('val', 'image'))->render();
+                /*
                 if (Gate::allows('stock-entry')) {
                     $clickEntry = "abreModal('Entrada: {$val->product->name}', '".route('stock.entry', $val->id)."', 'form-stock', 2, 'true',400,450)";
                     $actions .= '<p><button type="button" onclick="'.$clickEntry.'" class="button compact icon-plus blue-gradient">'.constLang('entry').'</button></p>';
                 }
+                */
 
-                $nData['image']       = $image. $cover;
+                $nData['image']       = $photo;
                 $nData['description'] = $description;
                 $nData['reference']   = $reference;
                 $nData['grid']        = $grid;
@@ -178,6 +139,50 @@ class StockRepository implements StockInterface
         );
 
         return $out;
+
+    }
+
+
+    public function exitStock($configProduct, $input, $id)
+    {
+        $grid = $this->setId($id);
+        $image = $grid->image;
+        $product = $grid->product;
+
+        if ($input['qty'] > $grid->stock) {
+            $success = false;
+            $message = constLang('messages.stock.output_greater');
+
+        } else {
+
+            $motive = $input['motive'];
+            if ($motive == 1) {
+                $input['input']  = $grid->input - $input['qty'];
+                $input['stock']  = $grid->stock - $input['qty'];
+            } elseif ($motive == 2) {
+                $input['output']  = $grid->output + $input['qty'];
+                $input['stock']  = $grid->stock - $input['qty'];
+            }
+
+            $update = $grid->update($input);
+            if ($update) {
+                if ($product->kit == 1) {
+
+                    $inventory = $this->interInventory->exitKit($configProduct, $grid, $image, $product, $input);
+                }
+                $success = true;
+                $message = constLang('messages.stock.movement_text.output');
+            } else {
+                $message = constLang('messages.stock.update_false');
+            }
+        }
+        $out = array(
+            'success' => $success,
+            'message' => $message
+        );
+
+        return response()->json($out);
+
 
     }
 
@@ -205,27 +210,6 @@ class StockRepository implements StockInterface
 
         } elseif ($input['ac'] == 'exit') {
 
-            if ($input['qty'] > $grid->stock) {
-                $success = false;
-                $message = constLang('messages.stock.output_greater');
-
-            } else {
-                if ($input['motive'] == 1) {
-                    $input['output'] = $grid->output - $input['qty'];
-                    $input['stock'] = $grid->stock + $input['qty'];
-                } else {
-                    $input['output'] = $grid->output + $input['qty'];
-                    $input['stock'] = $grid->input - ($grid->output + $input['qty']);
-                }
-                $update = $grid->update($input);
-                if ($update) {
-                    $inventory = $this->interInventory->updateStock($configProduct, $grid, $image, $product, $input);
-                    $success = true;
-                    $message = constLang('messages.stock.movement_text.output');
-                } else {
-                    $message = constLang('messages.stock.update_false');
-                }
-            }
 
 
         } else {
@@ -233,12 +217,7 @@ class StockRepository implements StockInterface
             $message = constLang('messages.stock.action_null');
         }
 
-        $out = array(
-            'success' => $success,
-            'message' => $message
-        );
 
-        return response()->json($out);
     }
 
     /**

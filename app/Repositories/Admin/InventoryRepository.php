@@ -195,6 +195,7 @@ class InventoryRepository implements InventoryInterface
         }
     }
 
+
     /**
      * Date: 06/12/2019
      *
@@ -228,6 +229,46 @@ class InventoryRepository implements InventoryInterface
             ];
 
             dd($movement);
+
+            $parameters = array_merge($movement, $this->getParameters($product, $image, $grid));
+            $data = $this->model->create($parameters);
+            if ($data) {
+                return $data;
+            }
+        }
+    }
+
+
+    public function exitKit($configProduct, $grid, $image, $product, $input)
+    {
+        if ($configProduct->grids == 1) {
+
+            $previous = (int) $grid->stock + $input['qty'];
+            $motive = $input['motive'];
+            if ($motive == 1) {
+                $diff_qty = 0;
+                $diff_value = 0;
+            } elseif ($motive == 2) {
+                $diff_qty = (int) $input['qty'];
+                $diff_value = $input['qty'] * $product->cost->value;
+            }
+
+            $movement_type = constLang('messages.stock.movement_text.output');
+            $note = auth()->user()->name. ' '.constLang('messages.inventory.exit');
+
+            $movement = [
+                'entry' => $grid->input,
+                'exit' => $grid->output,
+                'previous' => $previous,
+                'motive' => $motive,
+                'movement_type' => $movement_type,
+                'movement_qty' => $input['qty'],
+                'diff_value' => $diff_value,
+                'diff_qty' => $diff_qty,
+                'cost_total' => $grid->stock * $product->cost->value,
+                'stock' => $grid->stock,
+                'note' => "{$note} {$input['qty']}, {$input['note']}"
+            ];
 
             $parameters = array_merge($movement, $this->getParameters($product, $image, $grid));
             $data = $this->model->create($parameters);
@@ -389,61 +430,6 @@ class InventoryRepository implements InventoryInterface
     }
 
 
-
-    public function updateStock($configProduct, $grid, $image, $product, $input)
-    {
-        if ($configProduct->grids == 1) {
-
-            $values = $this->getGrids($grid->id);
-            $count = count($values);
-            if ($count) {
-                foreach ($values as $key => $value) {
-                    if ($key == $count-1) {
-                        $data = $value;
-                    }
-                }
-            }
-
-            dd($data);
-
-            if ($input['ac'] == 'entry') {
-                $previous = (int) $data->stock - $input['qty'];
-                $motive = 0;
-                $diff_qty = 0;
-                $diff_value = 0;
-                $movement_type = constLang('messages.stock.movement_text.input');
-                $note = auth()->user()->name. ' '.constLang('messages.inventory.entry');
-
-
-            } elseif ($input['ac'] == 'exit') {
-                $previous = (int) $data->stock - $input['qty'];
-                $motive = $input['motive'];
-                $diff_qty = (int) $input['qty'];
-                $diff_value = $input['qty'] * $product->cost->value;
-                $movement_type = constLang('messages.stock.movement_text.output');
-                $note = auth()->user()->name. ' '.constLang('messages.inventory.exit');
-            }
-
-            $movement = [
-                'previous' => $previous,
-                'motive' => $motive,
-                'movement_type' => $movement_type,
-                'movement_qty' => $input['qty'],
-                'diff_value' => $diff_value,
-                'diff_qty' => $diff_qty,
-                'cost_total' => $grid->input * $product->cost->value,
-                'stock' => $grid->stock,
-                'note' => "{$note} {$input['qty']}, {$input['note']}"
-            ];
-
-
-            $parameters = array_merge($movement, $this->getParameters($product, $image, $grid));
-            $data = $this->model->create($parameters);
-            if ($data) {
-                return $data;
-            }
-        }
-    }
 
 
     /**

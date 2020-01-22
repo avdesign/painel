@@ -25,7 +25,7 @@
             <p class="button-height">
                 <span class="input">
                     <label for="qty-min-max" class="button blue-gradient">
-                        <span class="small-margin-right">Quantidade de Saida</span>
+                        <span class="small-margin-right">Quantidade</span>
                     </label>
                     <input type="number" name="qty" class="input-unstyled input-sep" placeholder="Qtd" value="" style="width: 40px;">
                 </span>
@@ -48,19 +48,15 @@
             <p class="button-height">
                 <span class="button-group">
                     <label for="qty-min-max" class="button blue-gradient">
-                        <span class="small-margin-right">{{constLang('messages.inventory.motive.label')}}</span>
+                        <span class="small-margin-right">{{constLang('messages.inventory.motive.0')}}</span>
                     </label>
-                    <label for="motive-1" class="button green-active">
+                    <label for="motive-1" class="button with-tooltip green-active" title="{{constLang('messages.inventory.motive.11')}}" data-tooltip-options='{"classes":["anthracite-gradient"],"position":"bottom"}'>
                         <input type="radio" name="motive" id="motive-1" value="1" checked>
                         {{constLang('messages.inventory.motive.1')}}
                     </label>
-                    <label for="motive-2" class="button green-active">
+                    <label for="motive-2" class="button with-tooltip red-active" title="{{constLang('messages.inventory.motive.12')}}" data-tooltip-options='{"classes":["anthracite-gradient"],"position":"bottom"}'>
                         <input type="radio" name="motive" id="motive-2" value="2">
                         {{constLang('messages.inventory.motive.2')}}
-                    </label>
-                    <label for="motive-3" class="button green-active">
-                        <input type="radio" name="motive" id="motive-3" value="3">
-                        {{constLang('messages.inventory.motive.3')}}
                     </label>
                 </span>
             </p>

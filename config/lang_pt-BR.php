@@ -352,10 +352,12 @@ return [
             'entry' => 'deu entrada no estoque de',
             'exit' => 'deu saida no estoque de',
             'motive' => [
-                1 => 'Devolução',
+                0 => 'Motivo',
+                1 => 'Ajuste',
                 2 => 'Extraviado',
-                3 => 'Com Defeito',
-                'label' => 'Motivo',
+                10 => 'Motivo da Saida',
+                11 => 'Ajustar a quantidade do estoque.',
+                12 => 'Remove do estoque e registra como perca.'
             ]
         ],
 

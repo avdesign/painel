@@ -14,5 +14,6 @@ interface StockInterface
     public function getAll($request);
     public function update($configProduct, $input, $id);
     public function existStock($configProduct, $product);
+    public function exitStock($configProduct, $dataForm, $id);
 
 }

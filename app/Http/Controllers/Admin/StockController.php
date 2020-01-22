@@ -70,7 +70,9 @@ class StockController extends Controller
         return response()->json($data);
     }
 
-
+    /**
+     * Desabilitado
+     *
     public function entryStock($id)
     {
         if( Gate::denies("stock-entry") ) {
@@ -88,6 +90,8 @@ class StockController extends Controller
 
         return view("{$this->view}.entry", compact( 'data', 'image', 'product', 'configProduct'));
     }
+     */
+
 
     public function exitStock($id)
     {
@@ -111,23 +115,39 @@ class StockController extends Controller
 
     public function update(StockRequest $request, $id)
     {
-        $dataForm = $request->all();
-        if ($dataForm['ac'] == 'entry') {
-            if( Gate::denies("stock-entry") ) {
-                return view("backend.erros.message-401");
+        try{
+            DB::beginTransaction();
+
+            $dataForm = $request->all();
+            $configProduct = $this->configProduct->setId(1);
+
+            /* Desabilitado
+            if ($dataForm['ac'] == 'entry') {
+                if( Gate::denies("stock-entry") ) {
+                    return view("backend.erros.message-401");
+                }
+
+                // Criar o update = entryStock aqui
             }
-        }
-        if ($dataForm['ac'] == 'exit') {
-            if( Gate::denies("stock-exit") ) {
-                return view("backend.erros.message-401");
+            */
+
+            if ($dataForm['ac'] == 'exit') {
+                if( Gate::denies("stock-exit") ) {
+                    return view("backend.erros.message-401");
+                }
+                $update = $this->interModel->exitStock($configProduct, $dataForm, $id);
             }
+
+            if ($update) {
+                DB::commit();
+                return $update;
+            }
+
+        } catch(\Exception $e){
+
+            DB::rollback();
+            return $e->getMessage();
         }
-
-        $configProduct = $this->configProduct->setId(1);
-
-        $data = $this->interModel->update($configProduct, $dataForm, $id);
-
-        return $data;
     }
 
 }

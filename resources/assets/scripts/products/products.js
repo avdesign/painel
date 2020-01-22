@@ -132,6 +132,7 @@
                             $('input[name="prod[name]"]').val('');
                             $('input[name="img[code]"]').val(data.code);
                             $('input[name="img[order]"]').val('1');
+                            $('input[name="grids[input]"]').val(' ');
 
                             var count_product = $("#count_product").html(),
                                 total_product = parseFloat(count_product)+1;
