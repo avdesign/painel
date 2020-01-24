@@ -178,7 +178,10 @@ class StockRepository implements StockInterface
         }
         $out = array(
             'success' => $success,
-            'message' => $message
+            'message' => $message,
+            'entry' => $grid->input,
+            'exit' => $grid->output,
+            'total' => $grid->stock
         );
 
         return response()->json($out);

@@ -112,7 +112,11 @@ class StockController extends Controller
 
     }
 
-
+    /**
+     * @param StockRequest $request
+     * @param $id
+     * @return View
+     */
     public function update(StockRequest $request, $id)
     {
         try{

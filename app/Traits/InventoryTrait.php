@@ -22,6 +22,11 @@ trait InventoryTrait
 
     public function dataProduct($product)
     {
+        if ($product->kit == 1) {
+            $kit_name = $product->kit_name. ' ('.$product->unit.' '.$product->measure.')';
+        } else {
+            $kit_name = $product->kit_name. $product->unit.' '.$product->measure;
+        }
         return [
             'product_id' => $product->id,
             'brand' => $product->brand,
@@ -29,7 +34,7 @@ trait InventoryTrait
             'category' => $product->category,
             'product' => $product->name,
             'kit' => $product->kit,
-            'kit_name' => $product->kit_name. '('.$product->unit.' '.$product->measure.')',
+            'kit_name' => $kit_name,
             'offer' => $product->offer,
             'cost_unit' => $product->cost->value
         ];

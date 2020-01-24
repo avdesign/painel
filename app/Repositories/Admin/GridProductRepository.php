@@ -179,12 +179,13 @@ class GridProductRepository implements GridProductInterface
      */
     public function deleteKit($configProduct, $image, $product)
     {
-        if ($product->stock == 1) {
-            foreach ($image->grids as $grid) {
-                dd($grid);
-                $inventory = $this->interInventory->deleteKit($configProduct, $product, $image, $grid);
+        if ($configProduct->stock == 1) {
+            if ($configProduct->grids == 1) {
+                foreach ($image->grids as $grid) {
+                    $data = $this->setId($grid->id);
+                    $data->delete();
+                }
             }
-            return $inventory;
         }
 
         return true;
@@ -192,6 +193,8 @@ class GridProductRepository implements GridProductInterface
 
 
     /**
+     * Date: 01/23/2020
+     *
      * @param $configProduct
      * @param $input
      * @param $image
@@ -313,6 +316,8 @@ class GridProductRepository implements GridProductInterface
      */
     public function addUnit($configProduct, $input, $image, $product, $view)
     {
+        dd('addUnit');
+
 
         $dataForm['color']          = $image->color;
         $dataForm['kit']            = $product->kit;
@@ -409,22 +414,19 @@ class GridProductRepository implements GridProductInterface
         if ($configProduct->grids == 1) {
 
             $change = '';
-            $action['name'] = false;
-            $action['entry'] = false;
+            $entry  = $input['input'];
             if ($grid->grid != $input['grid']) {
                 $dataForm['grid'] = $input['grid'];
                 $change .= $input['grid'];
-                $action['name'] = 'update';
             }
 
             if ($product->stock == 1) {
 
-                if (!empty($input['input'])) {
-                    $dataForm['input'] = $input['input'];
-                    $dataForm['stock'] = $input['input'] + $grid->stock;
-                    $change .= ', ' . constLang('entry') . ':' . $input['input'];
+                if (!empty($entry)) {
+                    $dataForm['input'] = $entry;
+                    $dataForm['stock'] = $entry + $grid->stock;
+                    $change .= ', ' . constLang('entry') . ':' . $entry;
                     $change .= ', ' . constLang('stock') . ':' . $dataForm['stock'];
-                    $action['entry'] = 'create';
                 }
                 if ($product->qty_min == 1) {
                     if ($grid->qty_min != $input['qty_min']) {
@@ -452,7 +454,7 @@ class GridProductRepository implements GridProductInterface
                     );
 
                     if ($product->stock == 1) {
-                        $inventory = $this->interInventory->updateUnit($configProduct, $grid, $image, $product, $action);
+                        $inventory = $this->interInventory->updateUnit($configProduct, $grid, $image, $product, $entry);
                     }
 
                     $html = view("{$view}.modal.render-update", compact('grid', 'product'))->render();
@@ -623,7 +625,6 @@ class GridProductRepository implements GridProductInterface
         {
             $units  += $value;
         }
-
 
         return $units;
     }

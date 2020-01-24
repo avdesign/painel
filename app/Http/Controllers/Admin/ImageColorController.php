@@ -238,6 +238,7 @@ class ImageColorController extends Controller
             return view("backend.erros.message-401");
         }
 
+
         try{
             DB::beginTransaction();
 
@@ -266,9 +267,7 @@ class ImageColorController extends Controller
                         $grids = true;
                     }
                     if ($grids) {
-
                         $out = $this->interModel->uploadRender($config, $image, $action, $configProduct->code);
-
                         DB::commit();
 
                         return response()->json($out);

@@ -79,6 +79,9 @@
                 },
                 success: function(data){
                     if(data.success == true){
+                        $("#entry-"+id).text(data.entry);
+                        $("#exit-"+id).text(data.exit);
+                        $("#total-"+id).text(data.total);
                         fechaModal();
                         msgNotifica(true, data.message, true, false);
                     } else {
