@@ -11,6 +11,7 @@ use AVDPainel\Interfaces\Admin\CategoryInterface as InterCategory;
 use AVDPainel\Interfaces\Admin\GridProductInterface as InterModel;
 use AVDPainel\Interfaces\Admin\ConfigProductInterface as ConfigProduct;
 
+
 use AVDPainel\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class GridProductController extends Controller
      * @return void
      */
     public function __construct(
-        InterModel $model,
+        InterModel $interModel,
         InterImage $interImage,
         InterBrand $interBrand,
         InterProduct $interProduct,
@@ -37,13 +38,13 @@ class GridProductController extends Controller
     {
         $this->middleware('auth:admin');
 
-        $this->model              = $model;
-        $this->interImage         = $interImage;
-        $this->interBrand         = $interBrand;
-        $this->interProduct       = $interProduct;
-        $this->interSection       = $interSection;
-        $this->interCategory      = $interCategory;
-        $this->configProduct      = $configProduct;
+        $this->interModel     = $interModel;
+        $this->interImage     = $interImage;
+        $this->interBrand     = $interBrand;
+        $this->interProduct   = $interProduct;
+        $this->interSection   = $interSection;
+        $this->interCategory  = $interCategory;
+        $this->configProduct  = $configProduct;
     }
 
 
@@ -84,7 +85,7 @@ class GridProductController extends Controller
         $image = $this->interImage->setId($input['image_color_id']);
         $product = $image->product;
 
-        $create = $this->model->addUnit($configProduct, $input, $image, $product, $this->view);
+        $create = $this->interModel->addUnit($configProduct, $input, $image, $product, $this->view);
 
         if ($create) {
             DB::commit();
@@ -112,7 +113,7 @@ class GridProductController extends Controller
             return view("backend.erros.message-401");
         }
 
-        $data = $this->model->setId($id);
+        $data = $this->interModel->setId($id);
         $image_color_id = $data->image_color_id;
         $product = $data->product;
 
@@ -137,12 +138,12 @@ class GridProductController extends Controller
             DB::beginTransaction();
 
             $configProduct = $this->configProduct->setId(1);
-            $grid = $this->model->setId($id);
+            $grid = $this->interModel->setId($id);
             $image = $grid->image;
             $product = $grid->product;
             $input = $request['grids'];
 
-            $update = $this->model->updateUnit($configProduct, $input, $image, $product, $grid, $this->view);
+            $update = $this->interModel->updateUnit($configProduct, $input, $image, $product, $grid, $this->view);
             if ($update) {
                 DB::commit();
 
@@ -168,31 +169,28 @@ class GridProductController extends Controller
             return view("backend.erros.message-401");
         }
 
-        $grid = $this->model->setId($id);
-        $image = $grid->image;
-        $total = count($image->grids);
+        $configProduct = $this->configProduct->setId(1);
+        $grid = $this->interModel->setId($id);
+        if ($grid->stock >= 1) {
+            $out = array(
+                'success' => false,
+                'message' => constLang('messages.stock.remove_stock')
+            );
+            return response()->json($out);
+        }
+
         try{
             DB::beginTransaction();
 
-            if ($total >= 2) {
+            $image   = $grid->image;
+            $product = $grid->product;
+            $delete = $this->interModel->deleteUnit($configProduct, $image, $product, $grid);
+            if ($delete) {
+                DB::commit();
 
-                $configProduct = $this->configProduct->setId(1);
-                $product = $grid->product;
-
-                $delete = $this->model->deleteUnit($configProduct, $image, $product, $grid);
-                if ($delete) {
-                    DB::commit();
-
-                    return response()->json($delete);
-                }
-
-            } else {
-                $out = array(
-                    'success' => false,
-                    'message' => constLang('messages.grids.grid_min'),
-                );
-                return response()->json($out);
+                return response()->json($delete);
             }
+
 
         } catch(\Exception $e){
             DB::rollback();

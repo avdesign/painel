@@ -226,6 +226,7 @@ class GridBrandRepository implements GridBrandInterface
      */
     public function delete($id)
     {
+        dd($id);
         $data   = $this->model->find($id);
         $ship   = $data->brand;
         $delete = $data->delete();

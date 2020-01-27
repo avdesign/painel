@@ -70,7 +70,7 @@
             <p class="button-height align-center">
                 <span class="button-group">
                     <button onclick="fechaModal()" class="button"> Cancelar </button>
-                        <button id="btn-modal" onclick="formStock('exit', '{{$data->id}}')" class="button blue-gradient">
+                        <button id="btn-modal" onclick="exitStock('{{$data->id}}')" class="button blue-gradient">
                         <span class="icon-outbox"></span> Alterar
                     </button>
                 </span>

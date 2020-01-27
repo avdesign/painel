@@ -157,19 +157,33 @@ class StockRepository implements StockInterface
 
             $motive = $input['motive'];
             if ($motive == 1) {
-                $input['input']  = $grid->input - $input['qty'];
+                $input['input'] = $grid->input - $input['qty'];
                 $input['stock']  = $grid->stock - $input['qty'];
             } elseif ($motive == 2) {
-                $input['output']  = $grid->output + $input['qty'];
-                $input['stock']  = $grid->stock - $input['qty'];
+                $input['output'] = $grid->output + $input['qty'];
+
             }
+            $input['previous'] = $grid->stock;
+            $input['stock']  = $grid->stock - $input['qty'];
 
             $update = $grid->update($input);
             if ($update) {
                 if ($product->kit == 1) {
-
                     $inventory = $this->interInventory->exitKit($configProduct, $grid, $image, $product, $input);
+                } else {
+                    $inventory = $this->interInventory->exitUnit($configProduct, $grid, $image, $product, $input);
                 }
+
+                generateAccessesTxt(
+                    date('H:i:s').
+                        ' '.constLang('updated').' '.constLang('stock').
+                        ' - '.constLang('code').':'.$image->code.
+                        utf8_decode(', '.constLang('color').':'.$image->color.
+                        ', '.constLang('grid').':'.$grid->grid.
+                        ', '.constLang('messages.inventory.motive.0').':'.constLang('messages.inventory.motive.'.$motive).                        ' '.constLang('previous').':'.$input['previous'].
+                        ', '.constLang('exit').':'.$input['qty'].
+                        ', '.constLang('stock').':'.$input['stock'])
+                );
                 $success = true;
                 $message = constLang('messages.stock.movement_text.output');
             } else {
@@ -185,8 +199,6 @@ class StockRepository implements StockInterface
         );
 
         return response()->json($out);
-
-
     }
 
 
@@ -205,8 +217,10 @@ class StockRepository implements StockInterface
             $update = $grid->update($input);
             if ($update) {
                 $inventory = $this->interInventory->updateStock($configProduct, $grid, $image, $product, $input);
-                $success = true;
-                $message = constLang('messages.stock.movement_text.input');
+                if ($inventory) {
+                    $success = true;
+                    $message = constLang('messages.stock.movement_text.input');
+                }
             } else {
                 $message = constLang('messages.stock.update_false');
             }

@@ -65,7 +65,7 @@
         });
 
 
-        formStock = function(ac, id)
+        exitStock = function(id)
         {
             var form = $('#form-stock-'+id),
                 url  = form.attr('action');

@@ -21,4 +21,3 @@
 </div>  
 <div id="box-grids-colors"></div>
 @include('backend.colors-grids.load-script')
-

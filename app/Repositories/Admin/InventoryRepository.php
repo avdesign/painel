@@ -210,7 +210,6 @@ class InventoryRepository implements InventoryInterface
     {
         if ($configProduct->grids == 1) {
 
-            $previous = (int) $grid->stock + $input['qty'];
             $motive = $input['motive'];
             if ($motive == 1) {
                 $diff_qty = 0;
@@ -224,9 +223,7 @@ class InventoryRepository implements InventoryInterface
             $note = auth()->user()->name. ' '.constLang('messages.inventory.exit');
 
             $movement = [
-                'entry' => $grid->input,
-                'exit' => $grid->output,
-                'previous' => $previous,
+                'previous' => $input['previous'],
                 'motive' => $motive,
                 'movement_type' => $movement_type,
                 'movement_qty' => $input['qty'],
@@ -309,36 +306,36 @@ class InventoryRepository implements InventoryInterface
 
 
 
-    public function deleteUnit($configProduct, $product, $image, $grid)
+    public function exitUnit($configProduct, $grid, $image, $product, $input)
     {
         if ($configProduct->grids == 1) {
 
-            $dataForm['product_id'] = $image->product_id;
-            $dataForm['image_color_id'] = $image->id;
-            $dataForm['grid_id'] = $grid->id;
-            $dataForm['admin_id'] = auth()->user()->id;
-            $dataForm['profile_name'] = constLang('profile_name.admin');
-            $dataForm['movement_type'] = constLang('messages.stock.movement_text.delete');
-            $dataForm['movement'] = 0;
-            $dataForm['note'] = auth()->user()->name. ' '.constLang('messages.products.delete_true');
-            $dataForm['brand'] = $product->brand;
-            $dataForm['section'] = $product->section;
-            $dataForm['category'] = $product->category;
-            $dataForm['product'] = $product->name;
-            $dataForm['image'] = $image->image;
-            $dataForm['code'] = $image->code;
-            $dataForm['color'] = $image->color;
-            $dataForm['grid'] = $grid->grid;
-            $dataForm['previous'] = $grid->stock;
-            $dataForm['kit'] = $product->kit;
-            $dataForm['kit_name'] = $product->unit. ' '.$product->measure;
-            $dataForm['units'] = $grid->units;
-            $dataForm['offer'] = $product->offer;
-            $dataForm['cost_unit'] = $product->cost->value;
-            $dataForm['cost_total'] = $grid->stock * $product->cost->value;
-            $dataForm['stock'] = 0;
+            $motive = $input['motive'];
+            if ($motive == 1) {
+                $diff_qty = 0;
+                $diff_value = 0;
+            } elseif ($motive == 2) {
+                $diff_qty = (int) $input['qty'];
+                $diff_value = $input['qty'] * $product->cost->value;
+            }
 
-            $data = $this->model->create($dataForm);
+            $movement_type = constLang('messages.stock.movement_text.output');
+            $note = auth()->user()->name. ' '.constLang('messages.inventory.exit');
+
+            $movement = [
+                'previous' => $input['previous'],
+                'motive' => $motive,
+                'movement_type' => $movement_type,
+                'movement_qty' => $input['qty'],
+                'diff_value' => $diff_value,
+                'diff_qty' => $diff_qty,
+                'cost_total' => $grid->stock * $product->cost->value,
+                'stock' => $grid->stock,
+                'note' => "{$note} {$input['qty']}, {$input['note']}"
+            ];
+
+            $parameters = array_merge($movement, $this->getParameters($product, $image, $grid));
+            $data = $this->model->create($parameters);
             if ($data) {
                 return $data;
             }

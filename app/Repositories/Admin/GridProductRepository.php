@@ -316,8 +316,6 @@ class GridProductRepository implements GridProductInterface
      */
     public function addUnit($configProduct, $input, $image, $product, $view)
     {
-        dd('addUnit');
-
 
         $dataForm['color']          = $image->color;
         $dataForm['kit']            = $product->kit;
@@ -359,14 +357,15 @@ class GridProductRepository implements GridProductInterface
             $grid = $this->model->create($dataForm);
             if ($grid) {
                 if ($product->stock == 1) {
-                    $inventory = $this->interInventory->createKit($configProduct, $grid, $image, $product);
+                    $inventory = $this->interInventory->createUnit($configProduct, $grid, $image, $product);
                 }
 
-                generateAccessesTxt(date('H:i:s').utf8_decode(
-                    ' '.constLang('created').$access.
-                    ' '.constLang('product').':'.$product->name.
-                    ' '.constLang('code').':'.$image->code.
-                    ' '.constLang('color').':'.$image->color)
+                generateAccessesTxt(date('H:i:s').
+                    ' '.constLang('added').' '.constLang('grid').
+                    ' - '.constLang('product').' '.constLang('code').':'.$image->code.
+                    utf8_decode(
+                    ' '.constLang('color').':'.$image->color.
+                    ' '.constLang('created').$access)
                 );
 
                 $html = view("{$view}.modal.render-create", compact('grid', 'product'))->render();
@@ -410,7 +409,6 @@ class GridProductRepository implements GridProductInterface
      */
     public function updateUnit($configProduct, $input, $image, $product, $grid, $view)
     {
-
         if ($configProduct->grids == 1) {
 
             $change = '';
@@ -423,7 +421,7 @@ class GridProductRepository implements GridProductInterface
             if ($product->stock == 1) {
 
                 if (!empty($entry)) {
-                    $dataForm['input'] = $entry;
+                    $dataForm['input'] = $grid->input + $entry;
                     $dataForm['stock'] = $entry + $grid->stock;
                     $change .= ', ' . constLang('entry') . ':' . $entry;
                     $change .= ', ' . constLang('stock') . ':' . $dataForm['stock'];
@@ -445,12 +443,11 @@ class GridProductRepository implements GridProductInterface
             if ($change) {
                 $data = $grid->update($dataForm);
                 if ($data) {
-                    generateAccessesTxt(date('H:i:s').utf8_decode(
-                            ' '. constLang('updated').
-                            ' '.constLang('grid').':'.$change.
-                            ', '.constLang('product').':'.$product->name.
-                            ', '.constLang('code').':'.$image->code.
-                            ', '.constLang('code').':'.$image->color)
+                    generateAccessesTxt(date('H:i:s').
+                        ' '. constLang('updated').
+                        ' '.constLang('grid').' - '.
+                        ' '.constLang('code').' '.constLang('product').':'.$image->code.
+                        utf8_decode(', '.constLang('color').':'.$image->color, $change)
                     );
 
                     if ($product->stock == 1) {
@@ -492,21 +489,16 @@ class GridProductRepository implements GridProductInterface
         if ($configProduct->grids == 1) {
 
             $prev = $grid;
-            if ($product->stock == 1) {
-                $inventory = $this->interInventory->deleteUnit($configProduct, $product, $image, $grid);
-            }
-
             $delGrid = $grid->delete();
             if ($delGrid) {
 
-                generateAccessesTxt(date('H:i:s').utf8_decode(
+                generateAccessesTxt(date('H:i:s').
                         ' '.constLang('deleted').
                         ' '.constLang('grid').
-                        ':'.$prev->grid.
-                        ', '.constLang('stock').':'.$prev->stock.
-                        ', '.constLang('product').':'.$product->name.
-                        ', '.constLang('code').':'.$image->code.
-                        ', '.constLang('color').':'.$image->color)
+                        ' - '.constLang('code').' '.constLang('product').':'.$image->code.
+                        utf8_decode(':'.$prev->grid.
+                        ', '.constLang('color').':'.$image->color.
+                        ', '.constLang('stock').':'.$prev->stock)
                 );
 
                 $success = true;

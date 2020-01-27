@@ -31,7 +31,7 @@
 						@endphp
 						<span id="btns-{{$color->id}}" class="button-group compact children-tooltip" data-tooltip-options='{{$option}}'>
 							<button onclick="statusColor('{{$color->id}}','{{route('status-color', ['idpro' => $idpro,'id' => $color->id])}}','{{$color->active}}','{{$color->capa}}','{{csrf_token()}}');" class="button icon-tick {{$col}}-gradient" title="Alterar status {{$title}}"></button>
-							<button onclick="abreModal('Editar: Cor {{$color->color}}', '{{route('colors-product.edit', ['idpro' => $color->product_id,'id' => $color->id])}}', 'form-colors', 2, 'true',800,780);" class="button" title="Editar imagem {{$title}}">Editar</button>
+							<button onclick="abreModal('Editar: Cor {{$color->color}}', '{{route('colors-product.edit', ['idpro' => $color->product_id,'id' => $color->id])}}', 'form-colors', 2, 'true',850,780);" class="button" title="Editar imagem {{$title}}">Editar</button>
 							<button onclick="deleteColor('{{$color->id}}', '{{route('colors-product.destroy', ['idpro' => $color->product_id, 'id' => $color->id])}}');" class="button icon-trash red-gradient" title="Excluir imagem {{$title}}"></button>
 						</span>
 					</div>

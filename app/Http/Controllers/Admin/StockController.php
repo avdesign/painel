@@ -70,28 +70,6 @@ class StockController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Desabilitado
-     *
-    public function entryStock($id)
-    {
-        if( Gate::denies("stock-entry") ) {
-            return view("backend.erros.message-401");
-        }
-
-        $data = $this->interModel->setId($id);
-        $product = $data->product;
-        $configProduct = $this->configProduct->setId(1);
-
-        // Configurações da pasta da imagem
-        $configImage   = $this->configImage->setName('default', 'T');
-        $path  = $configImage->path;
-        $image = url("{$this->photoUrl}{$path}{$data->image->image}");
-
-        return view("{$this->view}.entry", compact( 'data', 'image', 'product', 'configProduct'));
-    }
-     */
-
 
     public function exitStock($id)
     {
@@ -112,7 +90,11 @@ class StockController extends Controller
 
     }
 
+
+
     /**
+     *  Saida no estoque (Ajuste,Extraviado)
+     *
      * @param StockRequest $request
      * @param $id
      * @return View
@@ -125,23 +107,10 @@ class StockController extends Controller
             $dataForm = $request->all();
             $configProduct = $this->configProduct->setId(1);
 
-            /* Desabilitado
-            if ($dataForm['ac'] == 'entry') {
-                if( Gate::denies("stock-entry") ) {
-                    return view("backend.erros.message-401");
-                }
-
-                // Criar o update = entryStock aqui
+            if( Gate::denies("stock-exit") ) {
+                return view("backend.erros.message-401");
             }
-            */
-
-            if ($dataForm['ac'] == 'exit') {
-                if( Gate::denies("stock-exit") ) {
-                    return view("backend.erros.message-401");
-                }
-                $update = $this->interModel->exitStock($configProduct, $dataForm, $id);
-            }
-
+            $update = $this->interModel->exitStock($configProduct, $dataForm, $id);
             if ($update) {
                 DB::commit();
                 return $update;
@@ -153,5 +122,8 @@ class StockController extends Controller
             return $e->getMessage();
         }
     }
+
+
+
 
 }
